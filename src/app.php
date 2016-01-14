@@ -123,6 +123,22 @@ $app->get('/taxon/{taxon}',function($req,$res) {
     }
   }
 
+  $params=[
+    'index'=>'biodiv',
+    'type'=>'occurrence',
+    'body'=>[
+      'size'=> 9999,
+      'query'=>[ 'match'=>['scientificNameWithoutAuthorship'=>$taxon]]]];
+
+  $result = $es->search($params);
+  $occurrences=[];
+  foreach($result['hits']['hits'] as $hit) {
+    $occ = $hit['_source'];
+    $occurrences[] = $occ;
+  }
+  $props['occurrences']=$occurrences;
+  $props['occurrences_json']=json_encode($occurrences);
+
   $res->getBody()->write(view('taxon',$props));
   return $res;
 });
