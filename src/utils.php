@@ -16,7 +16,7 @@ function view($name,$props) {
     }
   }
 
-  $base = getenv('base');
+  $base = getenv('BASE');
   if($base == null) $base="";
   $props['base']=$base;
 
