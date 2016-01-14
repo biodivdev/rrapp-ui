@@ -1,6 +1,6 @@
 # Biodiv-UI
 
-The user interface for [Biodiversity Index Beta](http://biodiversity.io).
+The user interface for [Biodiversity Index](http://github.com/diogok/biodiv-idx).
 
 ## License
 
