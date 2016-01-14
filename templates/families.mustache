@@ -1,0 +1,13 @@
+{{> header}}
+
+<h1 class="pure-u-1">Families</h1>
+
+<ul class="pure-u-1">
+  {{#families}}
+  <li>
+    <a href="{{base}}/family/{{.}}">{{.}}</a>
+  </li>
+  {{/families}}
+</ul>
+
+{{> footer}}

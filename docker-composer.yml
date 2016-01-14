@@ -1,0 +1,14 @@
+biodivui:
+  image: cncflora/apache
+  links:
+    - elasticsearch:elasticsearch
+  ports:
+    - 8081:80
+  volumes:
+    - .:/var/www
+elasticsearch:
+  image: diogok/elasticsearch
+  ports:
+    - 9200:9200
+  volumes:
+    - /var/data/elasticsearch/data:/usr/share/elasticsearch/data:rw

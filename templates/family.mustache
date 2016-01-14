@@ -1,0 +1,25 @@
+{{> header}}
+
+<h1 class="pure-u-1">Species of {{family}}</h1>
+
+<ul class="pure-u-1">
+  {{#species}}
+  <li>
+    <i>
+      <a href="{{base}}/taxon/{{scientificNameWithoutAuthorship}}">
+        {{scientificNameWithoutAuthorship}}
+      </a>
+    </i>
+    {{scientificNameAuthorship}}
+    <br />
+    <small>
+      {{#synonyms}}
+        {{scientificNameWithoutAuthorship}};
+      {{/synonyms}}
+    </small>
+  </li>
+  {{/species}}
+</ul>
+
+{{> footer}}
+

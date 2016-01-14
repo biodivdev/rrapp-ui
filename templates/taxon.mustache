@@ -1,0 +1,144 @@
+{{> header}}
+
+<section class="taxon pure-u-1">
+  {{#taxon}}
+  <h2>{{family}}</h2>
+  <h1><i>{{scientificNameWithoutAuthorship}}</i> {{scientificNameAuthorship}}</h1>
+  <p>
+    Synonyms:
+    {{#synonyms}}
+      {{scientificNameWithoutAuthorship}} ; 
+    {{/synonyms}}
+    {{^synonyms}}N/A{{/synonyms}}
+  </p>
+  {{/taxon}}
+</section>
+
+{{#risk_assessment}}
+<section class='pure-u-1 risks'>
+  <h4>Risk Assessment</h4>
+  <table class='pure-table'>
+    <tr>
+      <th>Category</th>
+      <th>Criteria</th>
+      <th>Reason</th>
+    </tr>
+    {{#risk-assessment}}
+    <tr>
+      <td>{{category}}</td>
+      <td>{{criteria}}</td>
+      <td>{{reason}}</td>
+    </tr>
+    {{/risk-assessment}}
+  </table>
+</section>
+{{/risk_assessment}}
+
+<section class='pure-u-1 all-stats stats'>
+  <h4>All occurrences</h4>
+  <table class='pure-table'>
+    <tr>
+      <th>Extent of occurrence</th>
+      <td>{{eoo.area}}km²</td>
+    </tr>
+    <tr>
+      <th>Area of occupancy</th>
+      <td>{{aoo.area}}km²</td>
+    </tr>
+    <tr>
+      <th>Clusters</th>
+      <td>{{clusters.count}}</td>
+    </tr>
+    <tr>
+      <th>Clusters area</th>
+      <td>{{clusters.area}}km²</td>
+    </tr>
+  </table>
+</section>
+
+<section class='pure-u-1 recent-stats stats'>
+  <h4>Recent only</h4>
+  <table class='pure-table'>
+    <tr>
+      <th>Extent of occurrence</th>
+      <td>{{eoo_recent.area}}km²</td>
+    </tr>
+    <tr>
+      <th>Area of occupancy</th>
+      <td>{{aoo_recent.area}}km²</td>
+    </tr>
+    <tr>
+      <th>Clusters</th>
+      <td>{{clusters_recent.count}}</td>
+    </tr>
+    <tr>
+      <th>Clusters area</th>
+      <td>{{clusters_recent.area}}km²</td>
+    </tr>
+  </table>
+</section>
+
+<section class='pure-u-1 historic-stats stats'>
+  <h4>Historic only (abscent or > 50 years)</h4>
+  <table class='pure-table'>
+    <tr>
+      <th>Extent of occurrence</th>
+      <td>{{eoo_historic.area}}km²</td>
+    </tr>
+    <tr>
+      <th>Area of occupancy</th>
+      <td>{{aoo_historic.area}}km²</td>
+    </tr>
+    <tr>
+      <th>Clusters</th>
+      <td>{{clusters_historic.count}}</td>
+    </tr>
+    <tr>
+      <th>Clusters area</th>
+      <td>{{clusters_historic.area}}km²</td>
+    </tr>
+  </table>
+</section>
+
+<div class="pure-u-1" id='map'></div>
+
+<script type="text/javascript">
+  var map = L.map('map').setView([0,0], 1);
+
+  var land = L.tileLayer('http://{s}.tile3.opencyclemap.org/landscape/{z}/{x}/{y}.png')//.addTo(map);
+  var ocm = L.tileLayer('http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png').addTo(map);
+  var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png')//.addTo(map);
+
+  var base = { Landscape: land, OpenCycleMap: ocm, OpenStreetMap: osm };
+
+  var layers = {
+    'Extent of occurrence': L.geoJson({{{eoo_geojson}}}).addTo(map),
+    'Extent of occurrence - Historic': L.geoJson({{{eoo_historic_geojson}}}).addTo(map),
+    'Extent of occurrence - Recent': L.geoJson({{{eoo_recent_geojson}}}).addTo(map),
+    'Area of occupancy': L.geoJson({{{aoo_geojson}}}).addTo(map),
+    'Area of occupancy - Historic': L.geoJson({{{aoo_historic_geojson}}}).addTo(map),
+    'Area of occupancy - Recent': L.geoJson({{{aoo_recent_geojson}}}).addTo(map),
+    'Clusters': L.geoJson({{{clusters_geojson}}}).addTo(map),
+    'Clusters - Historic': L.geoJson({{{clusters_historic_geojson}}}).addTo(map),
+    'Clusters - Recent': L.geoJson({{{clusters_recent_geojson}}}).addTo(map)
+  };
+                      
+  L.control.layers(base,layers).addTo(map);
+  L.control.scale().addTo(map);
+
+
+</script>
+
+<section class="pure-u-1 elsewhere">
+  <h3>
+    Elsewhere:
+  </h3>
+  <p>
+    <a href="http://gbif.org/species/search?q={{taxon.scientificNameWithoutAuthorship}}">GBIF</a>,
+    <a href="http://eol.org/search?q={{taxon.scientificNameWithoutAuthorship}}">EOL</a>,
+    <a href="http://bionames.org/search/{{taxon.scientificNameWithoutAuthorship}}">BioNames</a>.
+  </p>
+</section>
+
+{{> footer}}
+

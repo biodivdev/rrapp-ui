@@ -1,0 +1,34 @@
+{{> header}}
+
+<form action="search" class="pure-form pure-u-1 pure-form-stacked" method='GET'>
+  <fieldset>
+    <legend>Search a specie</legend>
+    <input name="taxon" type="text" class='pure-input pure-input-1'/>
+    <button type='submit' class='pure-button pure-button-primary'>Search</button>
+  </fieldset>
+</form>
+
+<h1 class="pure-u-1">Search result</h1>
+
+<ul class="pure-u-1">
+  {{#species}}
+  <li>
+    <i>
+      <a href="{{base}}/taxon/{{scientificNameWithoutAuthorship}}">
+        {{scientificNameWithoutAuthorship}}
+      </a>
+    </i>
+    {{scientificNameAuthorship}}
+    <br />
+    <small>
+      {{#synonyms}}
+        {{scientificNameWithoutAuthorship}};
+      {{/synonyms}}
+    </small>
+  </li>
+  {{/species}}
+</ul>
+
+{{> footer}}
+
+

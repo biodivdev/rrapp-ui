@@ -1,0 +1,29 @@
+
+.content {
+  width: 1024px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+header {
+}
+
+footer {
+  padding: 10px;
+  background-color: #666;
+  color: #ddd;
+}
+
+footer a {
+  color: #ddd;
+}
+
+.stats table th {
+  width: 250px;
+  text-align:left;
+}
+
+#map {
+  margin-top: 20px;
+  height: 480px
+}

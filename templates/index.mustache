@@ -1,0 +1,21 @@
+{{> header}}
+
+<section class="stats pure-u-1">
+  <h3>Containing
+    <strong>{{taxa_count}}</strong> species with
+    <strong>{{analysis_count}}</strong> analysis of
+    <strong>{{occurrence_count}}</strong> occurrences.
+  </h3>
+</section>
+
+<form action="search" class="pure-form pure-u-1 pure-form-stacked" method='GET'>
+  <fieldset>
+    <legend>Search a specie</legend>
+    <input name="taxon" type="text" class='pure-input pure-input-1'/>
+    <button type='submit' class='pure-button pure-button-primary'>Search</button>
+    <p>Or <a href="{{base}}/families">navigate by family</a>.</p>
+    <p>There is also the <a href="/kibana">advanced search panel</a>.</p>
+  </fieldset>
+</form>
+
+{{> footer}}
