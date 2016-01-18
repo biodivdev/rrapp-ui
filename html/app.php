@@ -128,7 +128,7 @@ $app->get('/taxon/{taxon}',function($req,$res) {
     'type'=>'occurrence',
     'body'=>[
       'size'=> 9999,
-      'query'=>[ 'match'=>['scientificNameWithoutAuthorship'=>$taxon]]]];
+      'query'=>[ 'match'=>['scientificNameWithoutAuthorship'=>['query'=> $taxon,'operator'=>'and']]]]];
 
   $result = $es->search($params);
   $occurrences=[];
