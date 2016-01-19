@@ -1,8 +1,17 @@
 <?php
 
+$index=getenv('index');
+if($index==null) {
+  $index='biodiv';
+}
+define('INDEX',$index);
 function es() {
+  $es = getenv('ELASTICSEARCH');
+  if($es == null) {
+    $es = 'http://elasticsearch:9200';
+  }
   $client = \Elasticsearch\ClientBuilder::create()
-    ->setHosts(['http://elasticsearch:9200'])
+    ->setHosts([$es])
     ->build();
   return $client;
 }

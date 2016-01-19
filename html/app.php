@@ -8,13 +8,17 @@ $app->get('/',function($req,$res) {
   $props=[];
   $es = es();
 
-  $params = [ 'index'=>'biodiv', 'type'=>'taxon' ];
-  $props['taxa_count']=$es->count($params)['count'];
+  $params = [ 'index'=>INDEX, 'type'=>'taxon' ];
+    try {
+      $props['taxa_count']=$es->count($params)['count'];
+    }catch(Exception $e) {
+      var_dump($e->getMessage());exit;
+    }
 
-  $params = [ 'index'=>'biodiv', 'type'=>'occurrence' ];
+  $params = [ 'index'=>INDEX, 'type'=>'occurrence' ];
   $props['occurrence_count']=$es->count($params)['count'];
 
-  $params = [ 'index'=>'biodiv'];
+  $params = [ 'index'=>INDEX];
   $props['analysis_count']=$es->count($params)['count'] - $props['taxa_count'] - $props['occurrence_count'];
 
   $res->getBody()->write(view('index',$props));
@@ -27,7 +31,7 @@ $app->get('/families',function($req,$res){
   $es = es();
 
   $params = [
-    'index'=>'biodiv',
+    'index'=>INDEX,
     'type'=>'taxon',
     'size'=>0,
     'fields'=>[],
@@ -63,7 +67,7 @@ $app->get('/family/{family}',function($req,$res){
   $es = es();
 
   $params=[
-    'index'=>'biodiv',
+    'index'=>INDEX,
     'type'=>'taxon',
     'body'=>[
       'size'=> 9999,
@@ -98,7 +102,7 @@ $app->get('/taxon/{taxon}',function($req,$res) {
 
   $taxon = urldecode($req->getAttribute('taxon'));
 
-  $params=['index'=>'biodiv','type'=>'taxon','id'=>$taxon];
+  $params=['index'=>INDEX,'type'=>'taxon','id'=>$taxon];
   $props['taxon'] = $es->get($params)['_source'];
   $props['title'] = $props['taxon']['scientificName'];
 
@@ -106,7 +110,7 @@ $app->get('/taxon/{taxon}',function($req,$res) {
   $props['stats']=$stats;
 
   foreach($stats as $s) {
-    $params=['index'=>'biodiv','type'=>$s,'id'=>$taxon];
+    $params=['index'=>INDEX,'type'=>$s,'id'=>$taxon];
     
     try {
       $r = $es->get($params);
@@ -124,7 +128,7 @@ $app->get('/taxon/{taxon}',function($req,$res) {
   }
 
   $params=[
-    'index'=>'biodiv',
+    'index'=>INDEX,
     'type'=>'occurrence',
     'body'=>[
       'size'=> 9999,
@@ -149,7 +153,7 @@ $app->get('/search',function($req,$res) {
   $es = es();
 
   $params=[
-    'index'=>'biodiv',
+    'index'=>INDEX,
     'type'=>'taxon',
     'body'=>[
       'size'=> 9999,
