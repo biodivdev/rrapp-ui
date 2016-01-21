@@ -68,7 +68,7 @@ $app->get('/',function($req,$res) {
          'aggs'=>[
            'eoo_ranges'=>[
              'range'=>[ 
-               'field'=>'geo.properties.area',
+               'field'=>'area',
                'ranges'=> [ ["from"=>0,"to"=>1]
                            ,["from"=>1,"to"=>100]
                            ,["from"=>100,"to"=>500]
