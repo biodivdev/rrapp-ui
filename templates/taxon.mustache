@@ -35,6 +35,25 @@
 {{/risk_assessment}}
 
 <section class='pure-u-1 all-stats stats'>
+  <h4>Occurrences and Points</h4>
+  <p>Points are occurrences with usable coordinates.</p>
+  <table class='pure-table'>
+    <tr>
+      <th>Total</th>
+      <td>{{count.occurrences.count}} / {{count.points.count}}</td>
+    </tr>
+    <tr>
+      <th>Recent</th>
+      <td>{{count.occurrences.count_recent}} / {{count.points.count_recent}}</td>
+    </tr>
+    <tr>
+      <th>Historic</th>
+      <td>{{count.occurrences.count_historic}} / {{count.points.count_historic}}</td>
+    </tr>
+  </table>
+</section>
+
+<section class='pure-u-1 all-stats stats'>
   <h4>All occurrences</h4>
   <table class='pure-table'>
     <tr>
