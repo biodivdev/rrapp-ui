@@ -2,8 +2,8 @@
 
 <form action="search" class="pure-form pure-u-1 pure-form-stacked" method='GET'>
   <fieldset>
-    <legend>Search a specie</legend>
-    <input name="taxon" type="text" class='pure-input pure-input-1'/>
+    <legend>Search</legend>
+    <input name="query" type="text" class='pure-input pure-input-1' value="{{query}}"/>
     <button type='submit' class='pure-button pure-button-primary'>Search</button>
   </fieldset>
 </form>
@@ -11,22 +11,15 @@
 <h1 class="pure-u-1">Search result</h1>
 
 <ul class="pure-u-1">
-  {{#species}}
+  {{#found}}
   <li>
     <i>
-      <a href="{{base}}/taxon/{{scientificNameWithoutAuthorship}}">
-        {{scientificNameWithoutAuthorship}}
+      <a href="{{base}}/taxon/{{.}}">
+        {{.}}
       </a>
     </i>
-    {{scientificNameAuthorship}}
-    <br />
-    <small>
-      {{#synonyms}}
-        {{scientificNameWithoutAuthorship}};
-      {{/synonyms}}
-    </small>
   </li>
-  {{/species}}
+  {{/found}}
 </ul>
 
 {{> footer}}

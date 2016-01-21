@@ -236,30 +236,27 @@ $app->get('/taxon/{taxon}',function($req,$res) {
 });
 
 $app->get('/search',function($req,$res) {
-  $q = $_GET['taxon'];
+  $q = $_GET['query'];
 
   $es = es();
 
   $params=[
     'index'=>INDEX,
-    'type'=>'taxon',
     'body'=>[
       'size'=> 9999,
-      'query'=>[ 'match'=>['scientificName'=>$q]]]];
+      'query'=>['query_string'=>['analyze_wildcard'=>true,'query'=>$q]]]];
 
   $result = $es->search($params);
 
-  $spps=[];
+  $found=[];
   foreach($result['hits']['hits'] as $hit) {
-    $spp = $hit['_source'];
-    $spp['family']=strtoupper(trim($spp['family']));
-    $spps[] = $spp;
+    $found[] = $hit['_source']['scientificNameWithoutAuthorship'];
   }
-  usort($spps,function($a,$b){
-    return strcmp($a['scientificName'],$b['scientificName']);
-  });
+  $found = array_unique($found);
+  sort($found);
 
-  $props['species']=$spps;
+  $props['found']=$found;
+  $props['query']=$q;
 
   $res->getBody()->write(view('search',$props));
   return $res;
