@@ -27,8 +27,9 @@ function run_stats() {
     var segs = cats_chart.getSegmentsAtEvent(e);
     if(segs.length >= 1) {
       var val = segs[0].label;
-      var query = '_type:"risk_assessment" AND risk-assessment.category:"'+val+'"';
+      var query = 'risk-assessment.category:"'+val+'"';
       document.querySelector('form input').value=query;
+      document.querySelector('form').setAttribute('target','_blank');
       document.querySelector('form').submit();
     }
   }
@@ -44,14 +45,15 @@ function run_stats() {
     var segs = occs_points_chart.getSegmentsAtEvent(e);
     if(segs.length >= 1) {
       var val = segs[0].label;
-      var query = '_type:"count"';
+      var query = '';
       console.log(val);
       if(val=='Points'){
-        query+=' AND points.count:>0';
+        query+='points.count:>0';
       } else {
-        query+=' AND points.count:0';
+        query+='points.count:0';
       }
       document.querySelector('form input').value=query;
+      document.querySelector('form').setAttribute('target','_blank');
       document.querySelector('form').submit();
     }
   }
@@ -80,7 +82,7 @@ function run_stats() {
     var bars = points_chart.getBarsAtEvent(e);
     if(bars.length >= 1) {
       var val = points_values[bars[0].value];
-      var query = '_type:"count" AND points.count:';
+      var query = 'points.count:';
       if(val =='0') {
         query += '0';
       } else {
@@ -88,6 +90,7 @@ function run_stats() {
         query += '(>='+parts[0]+' AND <'+parts[1]+')';
       }
       document.querySelector('form input').value=query;
+      document.querySelector('form').setAttribute('target','_blank');
       document.querySelector('form').submit();
     }
   }
@@ -116,13 +119,14 @@ function run_stats() {
     var bars = occs_chart.getBarsAtEvent(e);
     if(bars.length >= 1) {
       var val = occs_values[bars[0].value];
-      var query = '_type:"count" AND occurrences.count:';
+      var query = 'occurrences.count:';
       if(val =='0') {
         query += '0';
       } else {
         var parts = val.split(' to ');
         query += '(>='+parts[0]+' AND <'+parts[1]+')';
       }
+      document.querySelector('form').setAttribute('target','_blank');
       document.querySelector('form input').value=query;
       document.querySelector('form').submit();
     }
@@ -159,6 +163,7 @@ function run_stats() {
         query += '(>='+parts[0]+' AND <'+parts[1]+')';
       }
       document.querySelector('form input').value=query;
+      document.querySelector('form').setAttribute('target','_blank');
       document.querySelector('form').submit();
     }
   }
@@ -194,6 +199,7 @@ function run_stats() {
         query += '(>='+parts[0]+' AND <'+parts[1]+')';
       }
       document.querySelector('form input').value=query;
+      document.querySelector('form').setAttribute('target','_blank');
       document.querySelector('form').submit();
     }
   }
