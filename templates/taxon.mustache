@@ -16,12 +16,12 @@
 
 {{#risk_assessment}}
 <section class='pure-u-1 risks'>
-  <h4>Risk Assessment</h4>
+  <h4>{{strings.risk-assessment}}</h4>
   <table class='pure-table'>
     <tr>
-      <th>Category</th>
-      <th>Criteria</th>
-      <th>Reason</th>
+      <th>{{strings.category}}</th>
+      <th>{{strings.criteria}}</th>
+      <th>{{strings.reason}}</th>
     </tr>
     {{#risk-assessment}}
     <tr>
@@ -35,85 +35,85 @@
 {{/risk_assessment}}
 
 <section class='pure-u-1 all-stats stats'>
-  <h4>Occurrences and Points</h4>
-  <p>Points are occurrences with usable coordinates.</p>
+  <h4>{{strings.occs-and-points}}</h4>
+  <p>{{strings.points-desc}}</p>
   <table class='pure-table'>
     <tr>
-      <th>Total</th>
+      <th>{{strings.total}}</th>
       <td>{{count.occurrences.count}} / {{count.points.count}}</td>
     </tr>
     <tr>
-      <th>Recent</th>
+      <th>{{strings.recent}}</th>
       <td>{{count.occurrences.count_recent}} / {{count.points.count_recent}}</td>
     </tr>
     <tr>
-      <th>Historic</th>
+      <th>{{strings.historic}}</th>
       <td>{{count.occurrences.count_historic}} / {{count.points.count_historic}}</td>
     </tr>
   </table>
 </section>
 
 <section class='pure-u-1 all-stats stats'>
-  <h4>All occurrences</h4>
+  <h4>{{strings.all-occs}}</h4>
   <table class='pure-table'>
     <tr>
-      <th>Extent of occurrence</th>
+      <th>{{strings.eoo}}</th>
       <td>{{eoo.area}}km²</td>
     </tr>
     <tr>
-      <th>Area of occupancy</th>
+      <th>{{strings.aoo}}</th>
       <td>{{aoo.area}}km²</td>
     </tr>
     <tr>
-      <th>Clusters</th>
+      <th>{{strings.clusters}}</th>
       <td>{{clusters.count}}</td>
     </tr>
     <tr>
-      <th>Clusters area</th>
+      <th>{{strings.clusters-area}}</th>
       <td>{{clusters.area}}km²</td>
     </tr>
   </table>
 </section>
 
 <section class='pure-u-1 recent-stats stats'>
-  <h4>Recent only</h4>
+  <h4>{{strings.recent-only}}</h4>
   <table class='pure-table'>
     <tr>
-      <th>Extent of occurrence</th>
+      <th>{{strings.eoo}}</th>
       <td>{{eoo_recent.area}}km²</td>
     </tr>
     <tr>
-      <th>Area of occupancy</th>
+      <th>{{strings.aoo}}</th>
       <td>{{aoo_recent.area}}km²</td>
     </tr>
     <tr>
-      <th>Clusters</th>
+      <th>{{strings.clusters}}</th>
       <td>{{clusters_recent.count}}</td>
     </tr>
     <tr>
-      <th>Clusters area</th>
+      <th>{{strings.clusters-area}}</th>
       <td>{{clusters_recent.area}}km²</td>
     </tr>
   </table>
 </section>
 
 <section class='pure-u-1 historic-stats stats'>
-  <h4>Historic only (abscent or > 50 years)</h4>
+  <h4>{{strings.historic-only}}</h4>
   <table class='pure-table'>
     <tr>
-      <th>Extent of occurrence</th>
+      <th>{{strings.eoo}}</th>
       <td>{{eoo_historic.area}}km²</td>
     </tr>
     <tr>
-      <th>Area of occupancy</th>
+      <th>{{strings.aoo}}</th>
       <td>{{aoo_historic.area}}km²</td>
     </tr>
     <tr>
-      <th>Clusters</th>
+      <th>{{strings.clusters}}</th>
       <td>{{clusters_historic.count}}</td>
     </tr>
     <tr>
-      <th>Clusters area</th>
+      <th>{{strings.clusters-area}}</th>
       <td>{{clusters_historic.area}}km²</td>
     </tr>
   </table>
