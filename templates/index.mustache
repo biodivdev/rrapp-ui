@@ -10,15 +10,15 @@
 
 <form action="search" class="pure-form pure-u-1 pure-form-stacked" method='GET'>
   <fieldset>
-    <legend>Search</legend>
+    <legend>{{strings.search}}</legend>
     <input name="query" type="text" class='pure-input pure-input-1' placeholder='Make your query'/>
-    <button type='submit' class='pure-button pure-button-primary'>Search</button>
-    <p>Or <a href="{{base}}/families">navigate by family</a>.</p>
+    <button type='submit' class='pure-button pure-button-primary'>{{strings.search}}</button>
+    <p>{{strings.or}} <a href="{{base}}/families">{{strings.navigate-by-families}}</a>.</p>
   </fieldset>
 </form>
 
 <section class="stats pure-u-1">
-  <h3 class='pure-u-1'>Statistics</h3>
+  <h3 class='pure-u-1'>{{strings.statistics}}</h3>
 
   <div class="pure-u-1-2 cats">
     <h4>Risk Categories</h4>

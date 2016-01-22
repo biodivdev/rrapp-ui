@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../vendor/autoload.php';
 include 'utils.php';
 
@@ -267,5 +268,11 @@ $app->get("/about",function($req,$res){
   return $res;
 });
 
+
+$app->get('/lang/{lang}',function($req,$res){
+  $_SESSION['lang']=$req->getAttribute('lang');
+  header('Location: '.$_SERVER['HTTP_REFERER']);
+  exit;
+});
 $app->run();
 

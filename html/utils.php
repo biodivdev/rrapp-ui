@@ -29,6 +29,12 @@ function view($name,$props) {
   if($base == null) $base="";
   $props['base']=$base;
 
+  if(isset($_SESSION['lang'])){
+    $props['strings']=json_decode(file_get_contents(__DIR__.'/../lang/'.$_SESSION['lang'].'.json'));
+  } else {
+    $props['strings']=json_decode(file_get_contents(__DIR__.'/../lang/en.json'));
+  }
+
   $template = file_get_contents(__DIR__.'/../templates/'.$name.'.mustache');
   $m = new \Mustache_Engine(array('partials'=>$partials));
   $content = $m->render($template,$props);

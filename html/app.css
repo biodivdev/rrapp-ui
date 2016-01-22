@@ -40,3 +40,11 @@ footer a {
 .stats canvas {
   height: 250px;
 }
+
+.langs {
+  float: right;
+  text-align:right;
+}
+
+header h1, header h2 {
+}

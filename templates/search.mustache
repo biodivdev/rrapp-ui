@@ -2,13 +2,13 @@
 
 <form action="search" class="pure-form pure-u-1 pure-form-stacked" method='GET'>
   <fieldset>
-    <legend>Search</legend>
+    <legend>{{strings.search}}</legend>
     <input name="query" type="text" class='pure-input pure-input-1' value="{{query}}"/>
-    <button type='submit' class='pure-button pure-button-primary'>Search</button>
+    <button type='submit' class='pure-button pure-button-primary'>{{strings.search}}</button>
   </fieldset>
 </form>
 
-<h1 class="pure-u-1">Search result</h1>
+<h1 class="pure-u-1">{{strings.search-result}}</h1>
 
 <ul class="pure-u-1">
   {{#found}}
