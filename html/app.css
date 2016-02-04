@@ -37,6 +37,7 @@ footer a {
 .stats div {
   float: left;
 }
+
 .stats canvas {
   height: 250px;
 }
@@ -48,3 +49,4 @@ footer a {
 
 header h1, header h2 {
 }
+

@@ -1,8 +1,10 @@
 {
   "containing":"Containing",
-  "spps-with":"Species with",
-  "analysis-of":"Analysis of",
+  "names-from":"taxon names from",
+  "accepted-names-with":"accepted names (species) with",
+  "analysis-of":"analysis of",
   "families":"Families",
+  "analysis-from":"Data collected and analysis performed at",
   "subtitle":"Spatial distribution and analysis of aggregated taxonomic and occurrency data.",
   "species-of":"Species of",
   "home":"Home",
@@ -19,7 +21,7 @@
   "search-result":"Search results",
   "elsewhere":"Elsewhere",
   "risk-categories":"Risk Categories",
-  "risk-categories-desc":"Number of species in each category of risk.",
+  "risk-categories-desc":"Number of species in each category of risk, calculated according to Rapid Risk Assessment based on geospatial distribution. View more on the 'About' page.",
   "occurrences-and-points":"Occurrences and points",
   "occurrences-and-points-desc":"Number of occurrences with and without points (usable coordinates).",
   "number-of-occs-by-spp":"Number of occurrences per specie",
@@ -43,6 +45,7 @@
   "clusters":"Clusters",
   "clusters-area":"Clusters area",
   "recent-only":"Recent only",
-  "historic-only":"Historic only (abscent or > 50 years)"
+  "historic-only":"Historic only (abscent or > 50 years)",
+  "stats-info":"General statistics based on the performed analysis. You can click on a item to link to corresponding search."
 
 }

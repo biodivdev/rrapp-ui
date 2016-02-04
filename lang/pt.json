@@ -1,7 +1,9 @@
 {
   "containing":"Contendo",
-  "spps-with":"Espécies com",
-  "analysis-of":"Análises de",
+  "names-from":"nomes de",
+  "accepted-names-with":"nomes aceitos com",
+  "analysis-of":"análises de",
+  "analysis-from":"Dados coletados e analises realizadas em",
   "families":"Famílias",
   "subtitle":"Distribuição geoespacial e analise de dados de taxonomia e ocorrência.",
   "species-of":"Espécies de",
@@ -19,7 +21,7 @@
   "search-result":"Resultados de busca",
   "elsewhere":"Na rede",
   "risk-categories":"Categorias de risco",
-  "risk-categories-desc":"Número de espécies em cada categoria de ameça.",
+  "risk-categories-desc":"Número de espécies em cada categoria de ameça, calculada de acordo com a metodologia de Rapid Risk Assessment, baseada em distruição geoespacial. Veja mais na página 'Sobre'.",
   "occurrences-and-points":"Ocorrências e pontos",
   "occurrences-and-points-desc":"Número de ocorrências com e sem pontos (coordenadas usáveis).",
   "number-of-occs-by-spp":"Número de ocorrências por espécie",
@@ -43,5 +45,6 @@
   "clusters":"Clusters",
   "clusters-area":"Área dos clusters",
   "recent-only":"Recente apenas",
-  "historic-only":"Historicio apenas (ausênte ou > 50 anos)"
+  "historic-only":"Historicio apenas (ausênte ou > 50 anos)",
+  "stats-info":"General statistics based on the performed analysis. You can click on a item to link to corresponding search."
 }

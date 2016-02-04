@@ -2,10 +2,12 @@
 
 <section class="counts pure-u-1">
   <h3>{{strings.containing}}
-    <strong>{{taxa_count}}</strong> {{strings.spps-with}}
+    <strong>{{taxa_count}}</strong> {{strings.names-from}}
+    <strong>{{accepted_count}}</strong> {{strings.accepted-names-with}}
     <strong>{{analysis_count}}</strong> {{strings.analysis-of}}
     <strong>{{occurrence_count}}</strong> {{strings.occurrences}}.
   </h3>
+  <p>{{strings.analysis-from}} <strong>{{last_updated}}</strong>.</p>
 </section>
 
 <form action="search" class="pure-form pure-u-1 pure-form-stacked" method='GET'>
@@ -20,6 +22,8 @@
 <section class="stats pure-u-1">
   <h3 class='pure-u-1'>{{strings.statistics}}</h3>
 
+  <p>{{strings.stats-info}}</p>
+
   <div class="pure-u-1-2 cats">
     <h4>{{strings.risk-categories}}</h4>
     <p>{{strings.risk-categories-desc}}</p>
@@ -31,6 +35,8 @@
     <p>{{strings.occurrences-and-points-desc}}</p>
     <canvas></canvas>
   </div>
+
+  <br clear='all'>
 
   <div class="pure-u-1-2 occs_ranges">
     <h4>{{strings.number-of-occs-by-spp}}</h4>
