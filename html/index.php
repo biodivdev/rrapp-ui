@@ -9,12 +9,21 @@ $app->get('/',function($req,$res) {
   $props=[];
   $es = es();
 
-  $params = [ 'index'=>INDEX, 'type'=>'taxon' ];
-    try {
-      $props['taxa_count']=$es->count($params)['count'];
-    }catch(Exception $e) {
-      var_dump($e->getMessage());exit;
-    }
+  $params = ['index'=>INDEX, 'type'=>'taxon'];
+  $props['taxa_count']=$es->count($params)['count'];
+
+  $params = ['index'=>INDEX, 'type'=>'taxon',
+              'body'=>[
+                'query'=>[ 'bool'=>[ 'must'=>[['match'=>['taxonomicStatus'=>'accepted']]]]]]];
+  $props['accepted_count']=$es->count($params)['count'];
+  $params = ['index'=>INDEX, 'type'=>'taxon',
+              'body'=>[
+                'size'=>1,
+                'fields'=>['timestamp'],
+                'query'=>['match_all'=>[]],
+                'sort'=>['timestamp'=>'desc']]];
+  $r = $es->search($params)['hits']['hits'][0]['fields']['timestamp'][0] / 1000;
+  $props['last_updated']=date('Y-m-d H:m:s',$r);
 
   $params = [ 'index'=>INDEX, 'type'=>'occurrence' ];
   $props['occurrence_count']=$es->count($params)['count'];

@@ -1,5 +1,5 @@
 biodivui:
-  image: diogok/apache
+  image: diogok/php7
   links:
     - elasticsearch:elasticsearch
   ports:
