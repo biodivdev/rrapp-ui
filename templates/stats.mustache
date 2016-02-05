@@ -1,0 +1,65 @@
+
+{{#stats}}
+
+<section class="stats pure-u-1">
+  <h3 class='pure-u-1'>{{strings.statistics}}</h3>
+
+  <p>{{strings.containing}}
+    <strong>{{taxa_count}}</strong> {{strings.names-from}}
+    <strong>{{accepted_count}}</strong> {{strings.accepted-names-with}}
+    <!--
+    <strong>{{analysis_count}}</strong> {{strings.analysis-of}}
+    -->
+    <strong>{{occurrence_count}}</strong> {{strings.occurrences}}.
+  </p>
+  <p>{{strings.analysis-from}} <strong>{{last_updated}}</strong>.</p>
+
+  <p>{{strings.stats-info}}</p>
+
+  <div class="pure-u-1-2 cats">
+    <h4>{{strings.risk-categories}}</h4>
+    <p>{{strings.risk-categories-desc}}</p>
+    <canvas></canvas>
+  </div>
+
+  <div class="pure-u-1-2 occs_points">
+    <h4>{{strings.occurrences-and-points}}</h4>
+    <p>{{strings.occurrences-and-points-desc}}</p>
+    <canvas></canvas>
+  </div>
+
+  <br clear='all'>
+
+  <div class="pure-u-1-2 occs_ranges">
+    <h4>{{strings.number-of-occs-by-spp}}</h4>
+    <p>{{strings.number-of-occs-by-spp-desc}}</p>
+    <canvas></canvas>
+  </div>
+
+  <div class="pure-u-1-2 points_ranges">
+    <h4>{{strings.number-of-points-by-spp}}</h4>
+    <p>{{strings.number-of-points-by-spp-desc}}</p>
+    <canvas></canvas>
+  </div>
+
+  <div class="pure-u-1-2 eoo_ranges">
+    <h4>{{strings.eoo}}</h4>
+    <p>{{strings.eoo-desc}}</p>
+    <canvas></canvas>
+  </div>
+
+  <div class="pure-u-1-2 aoo_ranges">
+    <h4>{{strings.aoo}}</h4>
+    <p>{{strings.aoo-desc}}</p>
+    <canvas></canvas>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js" type="text/javascript"></script>
+  <script src="{{base}}/stats.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var stats = {{{json}}};
+    window.onload = run_stats;
+  </script>
+</section>
+
+{{/stats}}
