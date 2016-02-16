@@ -57,6 +57,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js" type="text/javascript"></script>
   <script src="{{base}}/stats.js" type="text/javascript"></script>
   <script type="text/javascript">
+    var base = "{{base}}";
     var stats = {{{json}}};
     window.onload = run_stats;
   </script>

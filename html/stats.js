@@ -1,6 +1,11 @@
 
 function run_stats() {
 
+  function go_query(q) {
+    if(pre_query.length >=1) q = pre_query+' AND '+q;
+    location.href=base+'/search?query='+encodeURIComponent(q);
+  }
+
   for(var i=0;i<stats['categories'].length;i++) {
     var s = stats['categories'][i];
     if(s.label=='EX') {
@@ -28,9 +33,7 @@ function run_stats() {
     if(segs.length >= 1) {
       var val = segs[0].label;
       var query = 'risk-assessment.category:"'+val+'"';
-      document.querySelector('form input').value=query;
-      document.querySelector('form').setAttribute('target','_blank');
-      document.querySelector('form').submit();
+      go_query(query);
     }
   }
 
@@ -46,15 +49,12 @@ function run_stats() {
     if(segs.length >= 1) {
       var val = segs[0].label;
       var query = '';
-      console.log(val);
       if(val=='Points'){
         query+='points.count:>0';
       } else {
         query+='points.count:0';
       }
-      document.querySelector('form input').value=query;
-      document.querySelector('form').setAttribute('target','_blank');
-      document.querySelector('form').submit();
+      go_query(query);
     }
   }
 
@@ -89,9 +89,7 @@ function run_stats() {
         var parts = val.split(' to ');
         query += '(>='+parts[0]+' AND <'+parts[1]+')';
       }
-      document.querySelector('form input').value=query;
-      document.querySelector('form').setAttribute('target','_blank');
-      document.querySelector('form').submit();
+      go_query(query);
     }
   }
 
@@ -126,9 +124,7 @@ function run_stats() {
         var parts = val.split(' to ');
         query += '(>='+parts[0]+' AND <'+parts[1]+')';
       }
-      document.querySelector('form').setAttribute('target','_blank');
-      document.querySelector('form input').value=query;
-      document.querySelector('form').submit();
+      go_query(query);
     }
   }
 
@@ -162,9 +158,7 @@ function run_stats() {
         var parts = val.split(' to ');
         query += '(>='+parts[0]+' AND <'+parts[1]+')';
       }
-      document.querySelector('form input').value=query;
-      document.querySelector('form').setAttribute('target','_blank');
-      document.querySelector('form').submit();
+      go_query(query);
     }
   }
 
@@ -198,9 +192,7 @@ function run_stats() {
         var parts = val.split(' to ');
         query += '(>='+parts[0]+' AND <'+parts[1]+')';
       }
-      document.querySelector('form input').value=query;
-      document.querySelector('form').setAttribute('target','_blank');
-      document.querySelector('form').submit();
+      go_query(query);
     }
   }
 };
