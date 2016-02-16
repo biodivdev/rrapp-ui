@@ -123,7 +123,7 @@ function stats($family=null) {
       'size'=>0,
       'query'=>$q,
       'aggs'=>[
-       'categories'=>['terms'=>[ 'field'=>'risk-assessment.category','size'=>0]],
+       'categories'=>['terms'=>['field'=>'main-risk-assessment.category','size'=>0]],
        'occs_count'=>['sum'=>['field'=>'occurrences.count']],
        'points_count'=>['sum'=>['field'=>'points.count']],
        'occs_ranges'=>[
