@@ -2,7 +2,7 @@
 function run_stats() {
 
   function go_query(q) {
-    if(pre_query.length >=1) q = pre_query+' AND '+q;
+    if(typeof pre_query == 'string' && pre_query.length >=1) q = pre_query+' AND '+q;
     location.href=base+'/search?query='+encodeURIComponent(q);
   }
 
