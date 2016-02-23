@@ -121,56 +121,38 @@
 
 <div class="pure-u-1" id='map'></div>
 
-
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.css" />
 <link rel="stylesheet" href="http://cdn.jsdelivr.net/leaflet.markercluster/1.0.0-beta.2.0/MarkerCluster.css" />
 <link rel="stylesheet" href="http://cdn.jsdelivr.net/leaflet.markercluster/1.0.0-beta.2.0/MarkerCluster.Default.css" />
 
 <script src="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.js"></script>
 <script src="http://cdn.jsdelivr.net/leaflet.markercluster/1.0.0-beta.2.0/leaflet.markercluster.js" type="text/javascript"></script>
+<script src="{{base}}/map.js" type="text/javascript"></script>
 <script type="text/javascript">
-window.onload = function() {
-  var map = L.map('map').setView([0,0], 1);
-
-  var land = L.tileLayer('http://{s}.tile3.opencyclemap.org/landscape/{z}/{x}/{y}.png')//.addTo(map);
-  var ocm = L.tileLayer('http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png').addTo(map);
-  var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png')//.addTo(map);
-
-  var base = { Landscape: land, OpenCycleMap: ocm, OpenStreetMap: osm };
-
   var occurrences = {{{occurrences_json}}};
-  var markers = L.markerClusterGroup().addTo(map);
+  var eoo_geojson = {{{eoo_geojson}}};
+{{#eoo_historic_geojson}}
+  var eoo_historic_geojson = {{{eoo_historic_geojson}}};
+{{/eoo_historic_geojson}}
+{{^eoo_historic_geojson}}
+var eoo_historic_geojson={"features":[],"type":"FeatureCollection"};
+{{/eoo_historic_geojson}}
+  var eoo_recent_geojson = {{{eoo_recent_geojson}}};
+  var aoo_geojson = {{{aoo_geojson}}};
+  var aoo_historic_geojson = {{{aoo_historic_geojson}}};
+  var aoo_recent_geojson = {{{aoo_recent_geojson}}};
+  var clusters_geojson = {{{clusters_geojson}}};
+  var clusters_historic_geojson = {{{clusters_historic_geojson}}};
+  var clusters_recent_geojson = {{{clusters_recent_geojson}}};
+  window.onload=map(occurrences);
+</script>
 
-  for(var i =0;i<occurrences.length;i++) {
-    var occ = occurrences[i];
-    if(typeof occ.decimalLatitude == 'number' && typeof occ.decimalLongitude == 'number' 
-       && occ.decimalLatitude != 0.0 && occ.decimalLongitude != 0.0) {
-        try {
-          var point = L.marker([occ.decimalLatitude,occ.decimalLongitude]);
-          point.bindPopup('<pre>'+JSON.stringify(occ,null,2)+'</pre>');
-          markers.addLayer(point);
-        }catch(e) { }
-      }
-  }
-
-  var layers = {
-    'Occurrences': markers,
-    'Extent of occurrence': L.geoJson({{{eoo_geojson}}}).addTo(map),
-    'Extent of occurrence - Historic': L.geoJson({{{eoo_historic_geojson}}}).addTo(map),
-    'Extent of occurrence - Recent': L.geoJson({{{eoo_recent_geojson}}}).addTo(map),
-    'Area of occupancy': L.geoJson({{{aoo_geojson}}}).addTo(map),
-    'Area of occupancy - Historic': L.geoJson({{{aoo_historic_geojson}}}).addTo(map),
-    'Area of occupancy - Recent': L.geoJson({{{aoo_recent_geojson}}}).addTo(map),
-    'Clusters': L.geoJson({{{clusters_geojson}}}).addTo(map),
-    'Clusters - Historic': L.geoJson({{{clusters_historic_geojson}}}).addTo(map),
-    'Clusters - Recent': L.geoJson({{{clusters_recent_geojson}}}).addTo(map)
-  };
-                      
-  L.control.layers(base,layers).addTo(map);
-  L.control.scale().addTo(map);
+<style type="text/css">
+.leaflet-popup-content {
+  width: 450px !important;
 
 }
-</script>
+</style>
 
 <section class="pure-u-1 elsewhere">
   <h3>
