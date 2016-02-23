@@ -3,7 +3,13 @@ session_start();
 include '../vendor/autoload.php';
 include 'utils.php';
 
-$app = new \Slim\App;
+$configuration = [
+  'settings' => [
+    'displayErrorDetails' => true,
+  ],
+];
+
+$app = new \Slim\App($configuration);
 
 $app->get('/',function($req,$res) {
   $props=[];
@@ -175,5 +181,6 @@ $app->get('/lang/{lang}',function($req,$res){
   header('Location: '.$_SERVER['HTTP_REFERER']);
   exit;
 });
+
 $app->run();
 
