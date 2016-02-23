@@ -103,7 +103,6 @@ $app->get('/taxon/{taxon}',function($req,$res) {
   $props['title'] = $props['taxon']['scientificName'];
 
   $stats = ['eoo','eoo_historic','eoo_recent','aoo','aoo_historic','aoo_recent','clusters','clusters_historic','clusters_recent','risk_assessment','count'];
-  $props['stats']=$stats;
 
   foreach($stats as $s) {
     $params=['index'=>INDEX,'type'=>$s,'id'=>$taxon];
