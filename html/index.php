@@ -156,12 +156,31 @@ $app->get('/search',function($req,$res) {
 
   $result = $es->search($params);
 
+  $names=[];
+  foreach($result['hits']['hits'] as $hit) {
+    $names[] = $hit['_source']['scientificNameWithoutAuthorship'];
+  }
+  $names = array_unique($names);
+
+  $filter = ['bool'=>['minimum_should_match'=>0,'should'=>[]]];
+  foreach($names as $name) {
+    $filter['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship'=>['query'=>$name ,'operator'=>'and']]];
+  }
+
+  $params=[
+    'index'=>INDEX,
+    'type'=>'taxon',
+    'body'=>[
+      'size'=> 9999,
+      'filter'=>$filter]];
+  $result = $es->search($params);
   $found=[];
   foreach($result['hits']['hits'] as $hit) {
-    $found[] = $hit['_source']['scientificNameWithoutAuthorship'];
+    $found[] = $hit['_source'];
   }
-  $found = array_unique($found);
-  sort($found);
+  usort($found,function($a,$b){
+    return strcmp($a['scientificName'],$b['scientificName']);
+  });
 
   $props['found']=$found;
   $props['query']=$q;

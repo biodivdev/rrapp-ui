@@ -14,10 +14,17 @@
   {{#found}}
   <li>
     <i>
-      <a href="{{base}}/taxon/{{.}}">
-        {{.}}
+      <a href="{{base}}/taxon/{{scientificNameWithoutAuthorship}}">
+        {{scientificNameWithoutAuthorship}}
       </a>
     </i>
+    {{scientificNameAuthorship}}
+    <br />
+    <small>
+      {{#synonyms}}
+        {{scientificNameWithoutAuthorship}};
+      {{/synonyms}}
+    </small>
   </li>
   {{/found}}
 </ul>
