@@ -104,6 +104,25 @@
     </div>
   </div>
 
+  <div class="pure-u-1 clusters_ranges">
+    <h4>{{strings.number-of-clusters-by-spp}}</h4>
+    <canvas class='pure-u-1-2'></canvas><div class="pure-u-1-2">
+      <p>{{strings.number-of-clusters-by-spp-desc}}</p>
+      <table class="pure-table">
+        <tbody>
+          {{#stats.clusters_ranges}}
+          <tr>
+            <th>
+              <a href='{{base}}/search?query=_type:"clusters" AND count:{{q}}'>{{label}}</a>
+            </th>
+            <td>{{value}}</td>
+          </tr>
+          {{/stats.clusters_ranges}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="pure-u-1 eoo_ranges">
     <h4>{{strings.eoo}}</h4>
     <canvas class='pure-u-1-2'></canvas><div class="pure-u-1-2">

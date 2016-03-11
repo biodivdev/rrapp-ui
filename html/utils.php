@@ -148,6 +148,18 @@ function stats($family=null) {
                        ,["from"=>3,"to"=>10]
                        ,["from"=>10,"to"=>100]
                        ,["from"=>100,"to"=>99999]]]],
+       'clusters'=>[
+         'filter'=>['term'=>['_type'=>'clusters']],
+         'aggs'=>[
+           'clusters_ranges'=>[
+             'range'=>[ 
+               'field'=>'count',
+               'ranges'=> [ ["from"=>0,"to"=>1]
+                           ,["from"=>1,"to"=>3]
+                           ,["from"=>3,"to"=>10]
+                           ,["from"=>10,"to"=>100]
+                           ,["from"=>100,"to"=>99999]]]]
+         ]],
        'aoo'=>[
          'filter'=>['term'=>['_type'=>'aoo']],
          'aggs'=>[

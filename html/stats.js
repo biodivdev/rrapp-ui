@@ -31,6 +31,23 @@ function run_stats() {
   var occs_points_canvas=document.querySelector('.occs_points canvas');
   var occs_points_chart=new Chart(occs_points_canvas.getContext('2d')).Pie(occs_points,{animationEasing:'linear',animationSteps:30});
 
+  var occs_ranges={
+    labels:[],
+    datasets:[
+      {label:"Occurrences count range",data:[],fillColor:'#aaaaaa'}
+    ]
+  }
+
+  var occs_values=[];
+  for(var i=0;i<stats['occs_ranges'].length;i++) {
+    var s = stats['occs_ranges'][i];
+    occs_values[s.value]=s.label;
+    occs_ranges.labels.push(s.label);
+    occs_ranges.datasets[0].data.push(s.value);
+  }
+  var occs_canvas=document.querySelector('.occs_ranges canvas');
+  var occs_chart=new Chart(occs_canvas.getContext('2d')).Bar(occs_ranges,{});
+
   var points_ranges={
     labels:[],
     datasets:[
@@ -48,22 +65,22 @@ function run_stats() {
   var points_canvas=document.querySelector('.points_ranges canvas');
   var points_chart=new Chart(points_canvas.getContext('2d')).Bar(points_ranges,{});
 
-  var occs_ranges={
+  var clusters_ranges={
     labels:[],
     datasets:[
-      {label:"Occurrences count range",data:[],fillColor:'#aaaaaa'}
+      {label:"Locations/subpop. count range",data:[],fillColor:'#aaaaaa'}
     ]
   }
 
-  var occs_values=[];
-  for(var i=0;i<stats['occs_ranges'].length;i++) {
-    var s = stats['occs_ranges'][i];
-    occs_values[s.value]=s.label;
-    occs_ranges.labels.push(s.label);
-    occs_ranges.datasets[0].data.push(s.value);
+  var clusters_values=[];
+  for(var i=0;i<stats['clusters_ranges'].length;i++) {
+    var s = stats['clusters_ranges'][i];
+    clusters_values[s.value]=s.label;
+    clusters_ranges.labels.push(s.label);
+    clusters_ranges.datasets[0].data.push(s.value);
   }
-  var occs_canvas=document.querySelector('.occs_ranges canvas');
-  var occs_chart=new Chart(occs_canvas.getContext('2d')).Bar(occs_ranges,{});
+  var clusters_canvas=document.querySelector('.clusters_ranges canvas');
+  var clusters_chart=new Chart(clusters_canvas.getContext('2d')).Bar(clusters_ranges,{});
 
   var eoo_ranges={
     labels:[],

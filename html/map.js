@@ -29,9 +29,9 @@ function map(occurrences) {
     'Area of occupancy': L.geoJson(aoo_geojson).addTo(map),
     'Area of occupancy - Historic': L.geoJson(aoo_historic_geojson).addTo(map),
     'Area of occupancy - Recent': L.geoJson(aoo_recent_geojson).addTo(map),
-    'Clusters': L.geoJson(clusters_geojson).addTo(map),
-    'Clusters - Historic': L.geoJson(clusters_historic_geojson).addTo(map),
-    'Clusters - Recent': L.geoJson(clusters_recent_geojson).addTo(map)
+    'Location/Subpop.': L.geoJson(clusters_geojson).addTo(map),
+    'Location/Subpop. - Historic': L.geoJson(clusters_historic_geojson).addTo(map),
+    'Location/Subpop. - Recent': L.geoJson(clusters_recent_geojson).addTo(map)
   };
                       
   L.control.layers(base,layers).addTo(map);
