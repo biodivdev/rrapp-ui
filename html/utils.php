@@ -49,33 +49,38 @@ function stats($family=null) {
   $q=['match_all'=>[]];
   $filter=[];
   if($family != null) {
-    $params=[
-      'index'=>INDEX,
-      'type'=>'taxon',
-      'body'=>[
-        'size'=> 9999,
-        'fields'=>['scientificNameWithoutAuthorship','synonyms.scientificNameWithoutAuthorship'],
-        'query'=>[
-          'bool'=>[
-            'must'=>[
-              [ 'match'=>[ 'taxonomicStatus'=>'accepted' ] ],
-              [ 'match'=>[ 'family'=>trim($family) ] ] ] ] ] ] ];
-    $result = $es->search($params);
+    if(is_string($family)) {
+      $params=[
+        'index'=>INDEX,
+        'type'=>'taxon',
+        'body'=>[
+          'size'=> 9999,
+          'fields'=>['scientificNameWithoutAuthorship','synonyms.scientificNameWithoutAuthorship'],
+          'query'=>[
+            'bool'=>[
+              'must'=>[
+                [ 'match'=>[ 'taxonomicStatus'=>'accepted' ] ],
+                [ 'match'=>[ 'family'=>trim($family) ] ] ] ] ] ] ];
+      $result = $es->search($params);
 
-    $names= [];
-    foreach($result['hits']['hits'] as $hit) {
-      foreach($hit['fields'] as $f) {
-        foreach($f as $name) {
-          $names[] = $name;
+      $names= [];
+      foreach($result['hits']['hits'] as $hit) {
+        foreach($hit['fields'] as $f) {
+          foreach($f as $name) {
+            $names[] = $name;
+          }
         }
       }
-    }
 
-    $filter = ['bool'=>['minimum_should_match'=>0,'should'=>[]]];
-    foreach($names as $name) {
-      $filter['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship'=>['query'=>$name ,'operator'=>'and']]];
+      $filter = ['bool'=>['minimum_should_match'=>0,'should'=>[]]];
+      foreach($names as $name) {
+        $filter['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship'=>['query'=>$name ,'operator'=>'and']]];
+      }
+      $q=['filtered'=>['query'=>['match_all'=>[]],'filter'=>$filter]];
+    } else if (is_array($family)) {
+      $filter = $family;
+      $q=['filtered'=>['query'=>['match_all'=>[]],'filter'=>$filter]];
     }
-    $q=['filtered'=>['query'=>['match_all'=>[]],'filter'=>$filter]];
   }
 
   $params =[
@@ -196,7 +201,14 @@ function stats($family=null) {
           $stats[$rek]=[];
           foreach($reagg['buckets'] as $value) {
             $key = str_replace("-"," ~ ",str_replace(".0","",strtoupper( $value['key'] )));
-            $stats[$rek][]=['label'=>$key,'value'=>$value['doc_count']];
+            $q=null;
+            if(strpos($key,"~") !== false){
+              $partsq=explode(" ~ ",$key);
+              $q='(>='.$partsq[0].' AND <'.$partsq[1].')';
+            } else {
+              $q=$key;
+            }
+            $stats[$rek][]=['label'=>$key,'value'=>$value['doc_count'],'q'=>$q];
           }
         }
       }

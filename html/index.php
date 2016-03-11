@@ -181,6 +181,8 @@ $app->get('/search',function($req,$res) {
     return strcmp($a['scientificName'],$b['scientificName']);
   });
 
+  $props['stats']=stats($filter);
+
   $props['found']=$found;
   $props['query']=$q;
 
