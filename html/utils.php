@@ -165,7 +165,7 @@ function stats($family=null) {
                'field'=>'area',
                'ranges'=> [ ["from"=>0,"to"=>1]
                            ,["from"=>1,"to"=>100]
-                           ,["from"=>100,"to"=>500]
+                           ,["from"=>100,"to"=>5000]
                            ,["from"=>500,"to"=>5000]
                            ,["from"=>5000,"to"=>20000]
                            ,["from"=>20000,"to"=>50000]
@@ -178,7 +178,15 @@ function stats($family=null) {
     if(isset($agg['buckets'])) {
       $stats[$k]=[];
       foreach($agg['buckets'] as $value) {
-        $stats[$k][]=['label'=>strtoupper($value['key']),'value'=>$value['doc_count']];
+        $key = str_replace("-"," ~ ",str_replace(".0","",strtoupper($value['key'])));
+        $q=null;
+        if(strpos($key,"~") !== false){
+          $partsq=explode(" ~ ",$key);
+          $q='(>='.$partsq[0].' AND <'.$partsq[1].')';
+        } else {
+          $q=$key;
+        }
+        $stats[$k][]=['label'=>$key,'value'=>$value['doc_count'],'q'=>$q];
       }
     } else if(isset($agg['value'])) {
       $stats[$k]=$agg['value'];
@@ -187,12 +195,15 @@ function stats($family=null) {
         if(isset($reagg['buckets'])) {
           $stats[$rek]=[];
           foreach($reagg['buckets'] as $value) {
-            $stats[$rek][]=['label'=>strtoupper($value['key']),'value'=>$value['doc_count']];
+            $key = str_replace("-"," ~ ",str_replace(".0","",strtoupper( $value['key'] )));
+            $stats[$rek][]=['label'=>$key,'value'=>$value['doc_count']];
           }
         }
       }
     }
   }
+
+  $stats['not_points_count']=$stats['occs_count']-$stats['points_count'];
 
   $stats['json']=json_encode($stats);
   return $stats;

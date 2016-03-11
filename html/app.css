@@ -18,7 +18,7 @@ footer a {
   color: #ddd;
 }
 
-.stats table th {
+.taxon-stats table th {
   width: 250px;
   text-align:left;
 }
@@ -32,10 +32,6 @@ footer a {
   height: 350px;
   max-height: 350px;
   overflow-y: scroll;
-}
-
-.stats div {
-  float: left;
 }
 
 .stats canvas {

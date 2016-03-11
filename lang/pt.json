@@ -49,5 +49,7 @@
   "clusters-area":"Área dos clusters",
   "recent-only":"Recente apenas",
   "historic-only":"Historicio apenas (ausênte ou > 50 anos)",
-  "stats-info":"Estatisticas gerais sobre as análises. Ao clicar em um gráfico será levado para a lista correspondente."
+  "stats-info":"Estatisticas gerais sobre as análises. Ao clicar em um gráfico será levado para a lista correspondente.",
+  "not-points":"Ocorrências sem ponto",
+  "points":"Pontos"
 }

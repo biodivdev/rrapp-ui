@@ -49,6 +49,8 @@
   "clusters-area":"Clusters area",
   "recent-only":"Recent only",
   "historic-only":"Historic only (abscent or > 50 years)",
-  "stats-info":"General statistics based on the performed analysis. You can click on a item to link to corresponding search."
+  "stats-info":"General statistics based on the performed analysis. You can click on a item to link to corresponding search.",
+  "not-points":"Occurrences without point",
+  "points":"Points"
 
 }
