@@ -10,6 +10,7 @@ function es() {
   if($es == null) {
     $es = 'http://elasticsearch:9200';
   }
+  $es = 'http://163.172.130.4:32771';
   $client = \Elasticsearch\ClientBuilder::create()
     ->setHosts([$es])
     ->build();

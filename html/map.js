@@ -11,6 +11,7 @@ function map(occurrences) {
 
   for(var i =0;i<occurrences.length;i++) {
     var occ = occurrences[i];
+    document.querySelector('#tables').appendChild(make_popup(occ));
     if(typeof occ.decimalLatitude == 'number' && typeof occ.decimalLongitude == 'number' 
        && occ.decimalLatitude != 0.0 && occ.decimalLongitude != 0.0) {
         try {

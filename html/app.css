@@ -46,3 +46,7 @@ footer a {
 header h1, header h2 {
 }
 
+#tables table {
+  margin-top: 10px;
+}
+
