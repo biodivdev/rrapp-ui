@@ -1,10 +1,10 @@
 
 {{#stats}}
 
-<section class="stats pure-u-1">
+<section class="stats">
   <h3 class='pure-u-1'>{{strings.statistics}}</h3>
 
-  <p>{{strings.containing}}
+  <p class='pure-u-1'>{{strings.containing}}
     <strong>{{taxa_count}}</strong> {{strings.names-from}}
     <strong>{{accepted_count}}</strong> {{strings.accepted-names-with}}
     <!--
@@ -12,13 +12,13 @@
     -->
     <strong>{{occurrence_count}}</strong> {{strings.occurrences}}.
   </p>
-  <p>{{strings.analysis-from}} <strong>{{last_updated}}</strong>.</p>
+  <p class='pure-u-1'>{{strings.analysis-from}} <strong>{{last_updated}}</strong>.</p>
 
-  <p>{{strings.stats-info}}</p>
+  <p class='pure-u-1'>{{strings.stats-info}}</p>
 
-  <div class="pure-u-1 cats">
-    <h4>{{strings.risk-categories}}</h4>
-    <canvas class='pure-u-1-2'></canvas><div class="pure-u-1-2">
+  <div class="cats">
+    <h4 class='pure-u-1'>{{strings.risk-categories}}</h4>
+    <canvas class='pure-u-1 pure-u-lg-1-2'></canvas><div class="pure-u-1 pure-u-lg-1-2">
       <p>{{strings.risk-categories-desc}}</p>
       <table class="pure-table">
         {{#stats.categories}}
@@ -33,9 +33,9 @@
     </div>
   </div>
 
-  <div class="pure-u-1 occs_points">
-    <h4>{{strings.occurrences-and-points}}</h4>
-    <canvas class='pure-u-1-2'></canvas><div class="pure-u-1-2">
+  <div class="occs_points">
+    <h4 class='pure-u-1'>{{strings.occurrences-and-points}}</h4>
+    <canvas class='pure-u-1 pure-u-lg-1-2'></canvas><div class="pure-u-1 pure-u-lg-1-2">
       <p>{{strings.occurrences-and-points-desc}}</p>
       <table class='pure-table'>
         <tbody>
@@ -66,9 +66,9 @@
     </div>
   </div>
 
-  <div class="pure-u-1 occs_ranges">
-    <h4>{{strings.number-of-occs-by-spp}}</h4>
-    <canvas class='pure-u-1-2'></canvas><div class="pure-u-1-2">
+  <div class="occs_ranges">
+    <h4 class='pure-u-1'>{{strings.number-of-occs-by-spp}}</h4>
+    <canvas class='pure-u-1 pure-u-lg-1-2'></canvas><div class="pure-u-1 pure-u-lg-1-2">
       <p>{{strings.number-of-occs-by-spp-desc}}</p>
       <table class="pure-table">
         <tbody>
@@ -85,9 +85,9 @@
     </div>
   </div>
 
-  <div class="pure-u-1 points_ranges">
-    <h4>{{strings.number-of-points-by-spp}}</h4>
-    <canvas class='pure-u-1-2'></canvas><div class="pure-u-1-2">
+  <div class="points_ranges">
+    <h4 class='pure-u-1'>{{strings.number-of-points-by-spp}}</h4>
+    <canvas class='pure-u-1 pure-u-lg-1-2'></canvas><div class="pure-u-1 pure-u-lg-1-2">
       <p>{{strings.number-of-points-by-spp-desc}}</p>
       <table class="pure-table">
         <tbody>
@@ -104,9 +104,9 @@
     </div>
   </div>
 
-  <div class="pure-u-1 clusters_ranges">
-    <h4>{{strings.number-of-clusters-by-spp}}</h4>
-    <canvas class='pure-u-1-2'></canvas><div class="pure-u-1-2">
+  <div class="clusters_ranges">
+    <h4 class='pure-u-1'>{{strings.number-of-clusters-by-spp}}</h4>
+    <canvas class='pure-u-1 pure-u-lg-1-2'></canvas><div class="pure-u-1 pure-u-lg-1-2">
       <p>{{strings.number-of-clusters-by-spp-desc}}</p>
       <table class="pure-table">
         <tbody>
@@ -124,8 +124,8 @@
   </div>
 
   <div class="pure-u-1 eoo_ranges">
-    <h4>{{strings.eoo}}</h4>
-    <canvas class='pure-u-1-2'></canvas><div class="pure-u-1-2">
+    <h4 class='pure-u-1'>{{strings.eoo}}</h4>
+    <canvas class='pure-u-1 pure-u-lg-1-2'></canvas><div class="pure-u-1 pure-u-lg-1-2">
       <p>{{strings.eoo-desc}}</p>
       <table class="pure-table">
         <tbody>
@@ -143,8 +143,8 @@
   </div>
 
   <div class="pure-u-1 aoo_ranges">
-    <h4>{{strings.aoo}}</h4>
-    <canvas class='pure-u-1-2'></canvas><div class="pure-u-1-2">
+    <h4 class='pure-u-1'>{{strings.aoo}}</h4>
+    <canvas class='pure-u-1 pure-u-lg-1-2'></canvas><div class="pure-u-1 pure-u-lg-1-2">
       <p>{{strings.aoo-desc}}</p>
       <table class="pure-table">
         <tbody>
