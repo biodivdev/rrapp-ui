@@ -1,14 +1,16 @@
-biodivui:
-  image: diogok/php7
-  links:
-    - elasticsearch:elasticsearch
-  ports:
-    - 8081:80
-  volumes:
-    - .:/var/www
-elasticsearch:
-  image: diogok/elasticsearch
-  ports:
-    - 9200:9200
-  volumes:
-    - /var/data/dwc-elasticsearch/data:/usr/share/elasticsearch/data:rw
+version: "2"
+services:
+  biodivui:
+    image: diogok/php7
+    links:
+      - elasticsearch:elasticsearch
+    ports:
+      - 8080:80
+    volumes:
+      - .:/var/www
+  elasticsearch:
+    image: diogok/elasticsearch
+    ports:
+      - 9200:9200
+    volumes:
+      - /var/data/dwc-elasticsearch/data:/usr/share/elasticsearch/data:rw
