@@ -30,6 +30,9 @@ function map(occurrences) {
     'Area of occupancy': L.geoJson(aoo_geojson).addTo(map),
     'Area of occupancy - Historic': L.geoJson(aoo_historic_geojson).addTo(map),
     'Area of occupancy - Recent': L.geoJson(aoo_recent_geojson).addTo(map),
+    'Area of occupancy variable': L.geoJson(aoo_variadic_geojson).addTo(map),
+    'Area of occupancy variable - Historic': L.geoJson(aoo_variadic_historic_geojson).addTo(map),
+    'Area of occupancy variable - Recent': L.geoJson(aoo_variadic_recent_geojson).addTo(map),
     'Location/Subpop.': L.geoJson(clusters_geojson).addTo(map),
     'Location/Subpop. - Historic': L.geoJson(clusters_historic_geojson).addTo(map),
     'Location/Subpop. - Recent': L.geoJson(clusters_recent_geojson).addTo(map)

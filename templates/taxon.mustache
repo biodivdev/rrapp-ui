@@ -61,8 +61,12 @@
       <td>{{eoo.area}}km²</td>
     </tr>
     <tr>
-      <th>{{strings.aoo}}</th>
+      <th>{{strings.aoo}} ({{aoo.step}}km²)</th>
       <td>{{aoo.area}}km²</td>
+    </tr>
+    <tr>
+      <th>{{strings.aoo}} ({{aoo_variadic.step}}km²)</th>
+      <td>{{aoo_variadic.area}}km²</td>
     </tr>
     <tr>
       <th>{{strings.clusters}}</th>
@@ -83,8 +87,12 @@
       <td>{{eoo_recent.area}}km²</td>
     </tr>
     <tr>
-      <th>{{strings.aoo}}</th>
+      <th>{{strings.aoo}} ({{aoo_recent.step}}km²)</th>
       <td>{{aoo_recent.area}}km²</td>
+    </tr>
+    <tr>
+      <th>{{strings.aoo}} ({{aoo_variadic_recent.step}}km²)</th>
+      <td>{{aoo_variadic_recent.area}}km²</td>
     </tr>
     <tr>
       <th>{{strings.clusters}}</th>
@@ -105,8 +113,12 @@
       <td>{{eoo_historic.area}}km²</td>
     </tr>
     <tr>
-      <th>{{strings.aoo}}</th>
+      <th>{{strings.aoo}} ({{aoo_historic.step}}km²)</th>
       <td>{{aoo_historic.area}}km²</td>
+    </tr>
+    <tr>
+      <th>{{strings.aoo}} ({{aoo_variadic_historic.step}}km²)</th>
+      <td>{{aoo_variadic_historic.area}}km²</td>
     </tr>
     <tr>
       <th>{{strings.clusters}}</th>
@@ -157,6 +169,9 @@
   var aoo_geojson = {{{aoo_geojson}}};
   var aoo_historic_geojson = {{{aoo_historic_geojson}}};
   var aoo_recent_geojson = {{{aoo_recent_geojson}}};
+  var aoo_variadic_geojson = {{{aoo_variadic_geojson}}};
+  var aoo_variadic_historic_geojson = {{{aoo_variadic_historic_geojson}}};
+  var aoo_variadic_recent_geojson = {{{aoo_variadic_recent_geojson}}};
   var clusters_geojson = {{{clusters_geojson}}};
   var clusters_historic_geojson = {{{clusters_historic_geojson}}};
   var clusters_recent_geojson = {{{clusters_recent_geojson}}};

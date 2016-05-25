@@ -50,3 +50,7 @@ header h1, header h2 {
   margin-top: 10px;
 }
 
+table tbody th {
+  text-align:left;
+
+}

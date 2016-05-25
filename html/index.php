@@ -102,7 +102,20 @@ $app->get('/taxon/{taxon}',function($req,$res) {
   $props['taxon'] = $es->get($params)['_source'];
   $props['title'] = $props['taxon']['scientificName'];
 
-  $stats = ['eoo','eoo_historic','eoo_recent','aoo','aoo_historic','aoo_recent','clusters','clusters_historic','clusters_recent','risk_assessment','count'];
+  $stats = ['eoo',
+            'eoo_historic',
+            'eoo_recent',
+            'aoo_variadic',
+            'aoo_variadic_historic',
+            'aoo_variadic_recent',
+            'aoo',
+            'aoo_historic',
+            'aoo_recent',
+            'clusters',
+            'clusters_historic',
+            'clusters_recent',
+            'risk_assessment',
+            'count'];
 
   foreach($stats as $s) {
     $params=['index'=>INDEX,'type'=>$s,'id'=>$taxon];
@@ -113,6 +126,19 @@ $app->get('/taxon/{taxon}',function($req,$res) {
         $props[$s]=$r['_source'];
         if(isset($r['_source']['geo'])) {
           $props[$s.'_geojson']=json_encode($r['_source']['geo']);
+          if(preg_match("/^aoo/",$s)) {
+            $nfeats = count($r['_source']['geo']['features']);
+            if($nfeats > 0) {
+              $props[$s]['step'] =  $r['_source']['area'] / $nfeats;
+            } else {
+              $props[$s]['step']=0;
+            }
+          }
+        }
+        if(isset($r['_source']['area'])) {
+          if(is_float($r['_source']['area'])) {
+            $props[$s]['area']=number_format($r['_source']['area'],2);
+          }
         }
       } else {
         $props[$s]=false;
