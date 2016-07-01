@@ -20,6 +20,12 @@ $app->get('/',function($req,$res) {
   return $res;
 });
 
+$app->get("/stats.json",function($req,$res){
+  header("Content-Type: application/json");
+  $res->getBody()->write(json_encode(stats()));
+  return $res;
+});
+
 $app->get('/families',function($req,$res){
   $props=[];
 
@@ -215,12 +221,6 @@ $app->get('/search',function($req,$res) {
   $res->getBody()->write(view('search',$props));
   return $res;
 });
-
-$app->get("/about",function($req,$res){
-  $res->getBody()->write(view('about',[]));
-  return $res;
-});
-
 
 $app->get('/lang/{lang}',function($req,$res){
   $_SESSION['lang']=$req->getAttribute('lang');
