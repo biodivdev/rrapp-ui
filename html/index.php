@@ -16,6 +16,28 @@ $app->get('/',function($req,$res) {
 
   $props['stats']=stats();
 
+  $tx = getenv('TAXADATA');
+  if($tx == null) {
+    $tx = 'http://taxadata';
+  }
+
+  $dwcb = getenv('DWCBOT');
+  if($dwcb == null) {
+    $dwcb = 'http://dwcbot';
+  }
+
+  $props['taxonSources']=[];
+  $props['occsSources']=[];
+  $sources = json_decode(file_get_contents($tx."/api/v2/sources/urls"));
+  foreach($sources->result as $url) {
+    $props['taxonSources'][] = $url;
+  }
+
+  $sources = json_decode(file_get_contents($dwcb."/inputs"));
+  foreach($sources->result as $url) {
+    $props['occsSources'][] = $url;
+  }
+
   $res->getBody()->write(view('index',$props));
   return $res;
 });

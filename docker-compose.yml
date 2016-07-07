@@ -14,3 +14,13 @@ services:
       - 9200:9200
     volumes:
       - /var/data/dwc-elasticsearch/data:/usr/share/elasticsearch/data:rw
+  taxadata:
+    image: diogok/taxadata
+    ports:
+      - 8181:80
+  dwcbot:
+    image: diogok/dwc-bot
+    ports:
+      - 8282:80
+    volumes:
+      - /var/data/dwc-bot:/var/data/dwc-bot:rw

@@ -53,5 +53,7 @@
   "historic-only":"Historicio apenas (ausênte ou > 50 anos)",
   "stats-info":"Estatisticas gerais sobre as análises. Ao clicar em um gráfico será levado para a lista correspondente.",
   "not-points":"Ocorrências sem ponto",
-  "points":"Pontos"
+  "points":"Pontos",
+  "taxon-sources":"Fontes de taxonomia",
+  "occs-sources":"Fontes de ocorrências"
 }

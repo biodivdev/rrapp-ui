@@ -1,0 +1,15 @@
+
+<section class="sources">
+  <h3 class="pure-u-1">{{strings.taxon-sources}}</h3>
+  <ul class='pure-u-1'>
+    {{#taxonSources}}
+    <li><a href="{{.}}">{{.}}</a></li>
+    {{/taxonSources}}
+  </ul>
+  <h3 class="pure-u-1">{{strings.occs-sources}}</h3>
+  <ul class='pure-u-1'>
+    {{#occsSources}}
+    <li><a href="{{.}}">{{.}}</a></li>
+    {{/occsSources}}
+  </ul>
+</section>
