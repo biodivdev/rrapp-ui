@@ -53,8 +53,8 @@
   "historic-only":"Historic only (abscent or > 50 years)",
   "stats-info":"General statistics based on the performed analysis. You can click on a item to link to corresponding search.",
   "not-points":"Occurrences without point",
-  "points":"Points"
+  "points":"Points",
   "taxon-sources":"Taxonomic sources",
-  "occs-sources":"Occurrence sources"
-
+  "occs-sources":"Occurrence sources",
+  "feedback":"Send your feedback"
 }
