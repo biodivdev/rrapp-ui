@@ -5,6 +5,10 @@
   padding: 10px;
 }
 
+.feedback>a {
+  color: gold;
+}
+
 header {
 }
 
