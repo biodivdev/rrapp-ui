@@ -16,29 +16,14 @@ $app->get('/',function($req,$res) {
 
   $props['stats']=stats();
 
-  $tx = getenv('TAXADATA');
-  if($tx == null) {
-    $tx = 'http://taxadata';
-  }
-
-  $dwcb = getenv('DWCBOT');
-  if($dwcb == null) {
-    $dwcb = 'http://dwcbot';
-  }
-
-  $props['taxonSources']=[];
-  $props['occsSources']=[];
-  $sources = json_decode(file_get_contents($tx."/api/v2/sources/urls"));
-  foreach($sources->result as $url) {
-    $props['taxonSources'][] = $url;
-  }
-
-  $sources = json_decode(file_get_contents($dwcb."/inputs"));
-  foreach($sources->result as $url) {
-    $props['occsSources'][] = $url;
-  }
-
   $res->getBody()->write(view('index',$props));
+  return $res;
+});
+
+$app->get('/about',function($req,$res) {
+  $props=[];
+
+  $res->getBody()->write(view('about',$props));
   return $res;
 });
 
@@ -64,7 +49,7 @@ $app->get('/families',function($req,$res){
       'aggs'=>[
         'families'=>[
           'terms'=>[
-            'field'=>'family',
+            'field'=>'family.raw',
             'size'=>0
           ]
         ]
@@ -75,7 +60,8 @@ $app->get('/families',function($req,$res){
   $r = $es->search($params);
   $families=[];
   foreach($r['aggregations']['families']['buckets'] as $f) {
-    $families[]=strtoupper( $f['key'] );
+    if(trim( $f['key'] ) == "") continue;
+    $families[]=strtoupper($f['key']);
   }
   sort($families);
   $props['families']=$families;
@@ -106,9 +92,7 @@ $app->get('/family/{family}',function($req,$res){
 
   $spps=[];
   foreach($result['hits']['hits'] as $hit) {
-    $spp = $hit['_source'];
-    $spp['family']=strtoupper(trim($spp['family']));
-    $spps[] = $spp;
+    $spps[] = $hit['_source'];
   }
   usort($spps,function($a,$b){
     return strcmp($a['scientificName'],$b['scientificName']);
@@ -128,9 +112,17 @@ $app->get('/taxon/{taxon}',function($req,$res) {
 
   $taxon = urldecode($req->getAttribute('taxon'));
 
-  $params=['index'=>INDEX,'type'=>'taxon','id'=>$taxon];
-  $props['taxon'] = $es->get($params)['_source'];
+  $params=['index'=>INDEX
+          ,'type'=>'taxon'
+          ,'body'=> [
+            'query'=>[
+              'bool'=>[
+                'must'=> [
+                  ['term'=>[ 'scientificNameWithoutAuthorship.raw'=>$taxon]]
+                  ,['term'=>[ 'taxonomicStatus'=>'accepted']]]]]]];
+  $props['taxon'] = $es->search($params)['hits']['hits'][0]['_source'];
   $props['title'] = $props['taxon']['scientificName'];
+  $props['taxon']['synonyms']=[];
 
   $stats = ['eoo',
             'eoo_historic',
@@ -180,10 +172,33 @@ $app->get('/taxon/{taxon}',function($req,$res) {
 
   $params=[
     'index'=>INDEX,
+    'type'=>'taxon',
+    'body'=>[
+      'size'=> 9999,
+      'fields'=>['scientificNameWithoutAuthorship'],
+      'query'=>['match'=>['acceptedNameUsage'=>['query'=>$taxon,'type'=>'phrase']]]]];
+
+  $result = $es->search($params);
+
+  $params=[
+    'index'=>INDEX,
     'type'=>'occurrence',
     'body'=>[
       'size'=> 9999,
-      'query'=>[ 'match'=>['scientificNameWithoutAuthorship'=>['query'=> $taxon,'operator'=>'and']]]]];
+      'query'=>[
+        'bool'=>[
+          'should'=>[]]]]];
+
+  $names=[];
+  foreach($result['hits']['hits'] as $hit) {
+    foreach($hit['fields'] as $f) {
+      foreach($f as $name) {
+        if($name != $props['taxon']['scientificNameWithoutAuthorship'])
+          $props[ 'taxon' ]['synonyms'][] = $name;
+        $params['body']['query']['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship'=>['query'=>$name,'type'=>'phrase']]];
+      }
+    }
+  }
 
   $result = $es->search($params);
   $occurrences=[];
@@ -200,6 +215,7 @@ $app->get('/taxon/{taxon}',function($req,$res) {
 
 $app->get('/search',function($req,$res) {
   $q = $_GET['query'];
+  $t=time();
 
   $es = es();
 
@@ -207,6 +223,7 @@ $app->get('/search',function($req,$res) {
     'index'=>INDEX,
     'body'=>[
       'size'=> 9999,
+      '_source'=>['scientificNameWithoutAuthorship'],
       'query'=>['query_string'=>['analyze_wildcard'=>true,'query'=>$q]]]];
 
   $result = $es->search($params);
@@ -217,9 +234,9 @@ $app->get('/search',function($req,$res) {
   }
   $names = array_unique($names);
 
-  $filter = ['bool'=>['minimum_should_match'=>0,'should'=>[]]];
+  $filter = ['bool'=>['should'=>[]]];
   foreach($names as $name) {
-    $filter['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship'=>['query'=>$name ,'operator'=>'and']]];
+    $filter['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship.raw'=>$name]];
   }
 
   $params=[
@@ -227,7 +244,7 @@ $app->get('/search',function($req,$res) {
     'type'=>'taxon',
     'body'=>[
       'size'=> 9999,
-      'filter'=>$filter]];
+      'query'=>['filtered'=>['query'=>['match_all'=>[]],'filter'=>$filter]]]];
   $result = $es->search($params);
   $found=[];
   foreach($result['hits']['hits'] as $hit) {

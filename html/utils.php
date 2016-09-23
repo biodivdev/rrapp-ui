@@ -1,8 +1,8 @@
 <?php
 
-$index=getenv('index');
+$index=getenv('INDEX');
 if($index==null) {
-  $index='biodiv';
+  $index='dwc';
 }
 define('INDEX',$index);
 function es() {
@@ -17,6 +17,22 @@ function es() {
 }
 
 function view($name,$props) {
+  if(isset($_SERVER['HTTP_ACCEPTS']) && $_SERVER['HTTP_ACCEPTS']== 'application/json') {
+    header('Content-Type: application/json');
+    foreach($props as $k=>$v) {
+      if(preg_match('/json/',$k)) {
+        unset($props[$k]);
+      } else if(is_object($props[$k]) || is_array($props[$k])) {
+        foreach($props[$k] as $kk=>$vv) {
+          if(preg_match('/json/',$kk)) {
+            unset($props[$k][$kk]);
+          }
+        }
+      }
+    }
+    return json_encode($props);
+  }
+
   $partials = [];
   $iterator = new \DirectoryIterator(__DIR__."/../templates");
   foreach ($iterator as $file) {
@@ -50,17 +66,36 @@ function stats($family=null) {
   $filter=[];
   if($family != null) {
     if(is_string($family)) {
+      $t=time();
       $params=[
         'index'=>INDEX,
         'type'=>'taxon',
         'body'=>[
           'size'=> 9999,
-          'fields'=>['scientificNameWithoutAuthorship','synonyms.scientificNameWithoutAuthorship'],
+          'fields'=>['scientificNameWithoutAuthorship'],
           'query'=>[
             'bool'=>[
               'must'=>[
                 [ 'match'=>[ 'taxonomicStatus'=>'accepted' ] ],
                 [ 'match'=>[ 'family'=>trim($family) ] ] ] ] ] ] ];
+      $result = $es->search($params);
+
+      $params=[
+        'index'=>INDEX,
+        'type'=>'taxon',
+        'body'=>[
+          'size'=> 9999,
+          'fields'=>['scientificNameWithoutAuthorship'],
+          'query'=>[
+            'bool'=>[
+              'must'=>[]]]]];
+      foreach($result['hits']['hits'] as $hit) {
+        foreach($hit['fields'] as $f) {
+          foreach($f as $name) {
+            $params['body']['query']['bool']['should'][]=['match'=>['acceptedNameUsage'=>['query'=>$name,'type'=>'phrase']]];
+          }
+        }
+      }
       $result = $es->search($params);
 
       $names= [];
@@ -72,9 +107,9 @@ function stats($family=null) {
         }
       }
 
-      $filter = ['bool'=>['minimum_should_match'=>0,'should'=>[]]];
+      $filter = ['bool'=>['should'=>[]]];
       foreach($names as $name) {
-        $filter['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship'=>['query'=>$name ,'operator'=>'and']]];
+        $filter['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship.raw'=>$name]];
       }
       $q=['filtered'=>['query'=>['match_all'=>[]],'filter'=>$filter]];
     } else if (is_array($family)) {
@@ -83,35 +118,25 @@ function stats($family=null) {
     }
   }
 
-  $params =[
+  $params = [
     'index'=>INDEX,
     'type'=>'taxon',
     'body'=>[
       'size'=>0,
       'query'=>$q,
-      'aggs'=>[
-            'synonyms'=>[
-              'value_count'=>['field'=>'synonyms.taxonRank']
-            ],
-            'accepted'=>[
-              'value_count'=>['field'=>'taxonRank']
-            ]
-      ]
-    ]
-  ];
+      'aggs'=>[ 'status'=>[ 'terms'=>['field'=> 'taxonomicStatus','size'=>0]]]]];
 
   $r = $es->search($params);
-  $stats['synonyms_count']=$r['aggregations']['synonyms']['value'];
-  $stats['accepted_count']=$r['aggregations']['accepted']['value'];
-  $stats['taxa_count']=$stats['synonyms_count']+$stats['accepted_count'];
+  $ts = $r['aggregations']['status']['buckets'];
+  foreach($ts as $tr) {
+    $stats[$tr['key'].'_count'] = $tr['doc_count'];
+  }
+  $stats['taxa_count']=$stats['synonym_count']+$stats['accepted_count'];
 
-  $params = [ 'index'=>INDEX, 'type'=>'occurrence','body'=>['query'=>$q]];
+  $params = ['index'=>INDEX, 'type'=>'occurrence','body'=>['query'=>$q]];
   $stats['occurrence_count']=$es->count($params)['count'];
 
-  //$params = [ 'index'=>INDEX,'body'=>[['query']=>$q]];
-  //$stats['analysis_count']=$es->count($params)['count'] - $props['taxa_count'] - $props['occurrence_count'];
-
-  $params = ['index'=>INDEX, 'type'=>'taxon',
+  $params = ['index'=>INDEX, 'type'=>'count',
               'body'=>[
                 'size'=>1,
                 'fields'=>['timestamp'],
@@ -126,11 +151,11 @@ function stats($family=null) {
     'fields'=>[],
     'body'=> [
       'size'=>0,
-      'query'=>$q,
+    'query'=>$q,
       'aggs'=>[
-       'categories'=>['terms'=>['field'=>'main-risk-assessment.category','size'=>0]],
-       'occs_count'=>['sum'=>['field'=>'occurrences.count']],
-       'points_count'=>['sum'=>['field'=>'points.count']],
+        'categories'=>[ 'terms'=>['field'=>'main-risk-assessment.category','size'=>0] ],
+        'occs_count'=>[ 'sum'=>['field'=>'occurrences.count'] ],
+        'points_count'=>['sum'=>['field'=>'points.count'] ],
        'occs_ranges'=>[
          'range'=>[ 
            'field'=>'occurrences.count',
