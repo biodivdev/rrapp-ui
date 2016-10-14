@@ -24,7 +24,7 @@
         {{#stats.categories}}
         <tr>
           <th>
-            <a href='{{base}}/search?query=risk-assessment.category:"{{label}}"'>{{label}}</a>
+            <a href='{{base}}/search?{{aq}}&query={{#query}}{{query}} (AND) {{/query}}main-risk-assessment.category:"{{label}}"'>{{label}}</a>
           </th>
           <td>{{value}}</td>
         </tr>
@@ -47,7 +47,7 @@
           </tr>
           <tr>
             <th>
-              <a href='{{base}}/search?query=points.count:0'>
+              <a href='{{base}}/search?{{aq}}&query={{#query}}{{query}} (AND) {{/query}}points.count:0'>
                 {{strings.not-points}}
               </a>
             </th>
@@ -55,7 +55,7 @@
           </tr>
           <tr>
             <th>
-              <a href='{{base}}/search?query=points.count:>0'>
+              <a href='{{base}}/search?{{aq}}&query={{#query}}{{query}} (AND) {{/query}}points.count:>0'>
                 {{strings.points}}
               </a>
             </th>
@@ -75,7 +75,7 @@
           {{#stats.occs_ranges}}
           <tr>
             <th>
-              <a href='{{base}}/search?query=occurrences.count:{{q}}'>{{label}}</a>
+              <a href='{{base}}/search?{{aq}}&query={{#query}}{{query}} (AND) {{/query}}occurrences.count:{{q}}'>{{label}}</a>
             </th>
             <td>{{value}}</td>
           </tr>
@@ -94,7 +94,7 @@
           {{#stats.points_ranges}}
           <tr>
             <th>
-              <a href='{{base}}/search?query=points.count:{{q}}'>{{label}}</a>
+              <a href='{{base}}/search?{{aq}}&query={{#query}}{{query}} (AND) {{/query}}points.count:{{q}}'>{{label}}</a>
             </th>
             <td>{{value}}</td>
           </tr>
@@ -113,7 +113,7 @@
           {{#stats.clusters_ranges}}
           <tr>
             <th>
-              <a href='{{base}}/search?query=_type:"clusters" AND count:{{q}}'>{{label}}</a>
+              <a href='{{base}}/search?{{aq}}&query={{#query}}{{query}} (AND) {{/query}}_type:"clusters" AND count:{{q}}'>{{label}}</a>
             </th>
             <td>{{value}}</td>
           </tr>
@@ -132,7 +132,7 @@
           {{#stats.eoo_ranges}}
           <tr>
             <th>
-              <a href='{{base}}/search?query=_type:"eoo" AND area:{{q}}'>{{label}}</a>
+              <a href='{{base}}/search?{{aq}}&query={{#query}}{{query}} (AND) {{/query}}_type:"eoo" AND area:{{q}}'>{{label}}</a>
             </th>
             <td>{{value}}</td>
           </tr>
@@ -151,7 +151,7 @@
           {{#stats.aoo_ranges}}
           <tr>
             <th>
-              <a href='{{base}}/search?query=_type:"aoo" AND area:{{q}}'>{{label}}</a>
+              <a href='{{base}}/search?{{aq}}&query={{#query}}{{query}} (AND) {{/query}}_type:"aoo" AND area:{{q}}'>{{label}}</a>
             </th>
             <td>{{value}}</td>
           </tr>

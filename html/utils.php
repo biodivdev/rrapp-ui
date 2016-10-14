@@ -48,7 +48,7 @@ function view($name,$props) {
   if(isset($_SESSION['lang'])){
     $props['strings']=json_decode(file_get_contents(__DIR__.'/../lang/'.$_SESSION['lang'].'.json'));
   } else {
-    $props['strings']=json_decode(file_get_contents(__DIR__.'/../lang/pt.json'));
+    $props['strings']=json_decode(file_get_contents(__DIR__.'/../lang/en.json'));
   }
 
   $template = file_get_contents(__DIR__.'/../templates/'.$name.'.mustache');

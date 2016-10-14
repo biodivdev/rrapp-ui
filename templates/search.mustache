@@ -3,6 +3,7 @@
 <form action="search" class="pure-form pure-u-1 pure-form-stacked" method='GET'>
   <fieldset>
     <legend>{{strings.search}}</legend>
+    <input name="family" type="hidden" value="{{family}}"/>
     <input name="query" type="text" class='pure-input pure-input-1' value="{{query}}"/>
     <button type='submit' class='pure-button pure-button-primary'>{{strings.search}}</button>
   </fieldset>

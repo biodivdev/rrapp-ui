@@ -91,8 +91,12 @@ $app->get('/family/{family}',function($req,$res){
   $result = $es->search($params);
 
   $spps=[];
+  $got=[];
   foreach($result['hits']['hits'] as $hit) {
-    $spps[] = $hit['_source'];
+    if(!isset($got[$hit['_source']['scientificNameWithoutAuthorship']])) {
+      $spps[] = $hit['_source'];
+      $got[$hit['_source']['scientificNameWithoutAuthorship']]=true;
+    }
   }
   usort($spps,function($a,$b){
     return strcmp($a['scientificName'],$b['scientificName']);
@@ -100,6 +104,7 @@ $app->get('/family/{family}',function($req,$res){
 
   $props['species']=$spps;
   $props['stats']=stats($family);
+  $props['aq']="&family=".$family;
 
   $res->getBody()->write(view('family',$props));
   return $res;
@@ -218,25 +223,68 @@ $app->get('/search',function($req,$res) {
   $t=time();
 
   $es = es();
+  $props=[];
+
+  $fnames=array();
+  if(isset($_GET['family']) && strlen($_GET['family'])>=1) {
+    $family = $_GET['family'];
+    $fparams=[
+      'index'=>INDEX,
+      'type'=>'taxon',
+      'body'=>[
+        'size'=> 9999,
+        'query'=>[
+          'bool'=>[
+            'must'=>[
+              [ 'match'=>[ 'taxonomicStatus'=>'accepted' ] ],
+              [ 'match'=>[ 'family'=>trim($family) ] ] ] ] ] ] ];
+
+    $fresult = $es->search($fparams);
+
+    foreach($fresult['hits']['hits'] as $hit) {
+      $name = $hit['_source']['scientificNameWithoutAuthorship'];
+      $fnames[$name]=true;
+    }
+    $props['family']=$family;
+    $props['aq']='&family='.$family;
+  }
 
   $params=[
     'index'=>INDEX,
     'body'=>[
       'size'=> 9999,
       '_source'=>['scientificNameWithoutAuthorship'],
-      'query'=>['query_string'=>['analyze_wildcard'=>true,'query'=>$q]]]];
-
-  $result = $es->search($params);
+      'query'=>['query_string'=>['analyze_wildcard'=>false,'query'=>null]]]];
 
   $names=[];
-  foreach($result['hits']['hits'] as $hit) {
-    $names[] = $hit['_source']['scientificNameWithoutAuthorship'];
+  $parts = explode(" (AND) ",$q);
+  foreach($parts as $qq) {
+    $params['body']['query']['query_string']['query']=$qq;
+    $result = $es->search($params);
+
+    $qnames=[];
+    foreach($result['hits']['hits'] as $hit) {
+      $name = $hit['_source']['scientificNameWithoutAuthorship'];
+      if(!empty($fnames)) {
+        if(isset($fnames[$name])) {
+          $qnames[] = $name;
+        }
+      } else {
+        $qnames[] = $name;
+      }
+    }
+    $qnames = array_unique($qnames);
+    if(empty($names)) {
+      $names = array_values($qnames);
+    } else {
+      $names = array_intersect($names,$qnames);
+    }
   }
   $names = array_unique($names);
 
   $filter = ['bool'=>['should'=>[]]];
   foreach($names as $name) {
-    $filter['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship.raw'=>$name]];
+      $filter['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship.raw'=>$name]];
   }
 
   $params=[
