@@ -53,90 +53,40 @@ function view($name,$props) {
 
   $template = file_get_contents(__DIR__.'/../templates/'.$name.'.mustache');
   $m = new \Mustache_Engine(array('partials'=>$partials));
+  $m->addHelper('json',function($v){ return json_encode($v);});
+  $m->addHelper('geojson',function($v){
+    if($v != null) {
+      return json_encode($v);
+    } else {
+      return '{"features":[],"type":"FeatureCollection"}';
+    }
+  });
   $content = $m->render($template,$props);
   return $content;
 }
 
-function stats($family=null) {
+function stats($query=null) {
   $es = es();
 
   $stats=[];
 
   $q=['match_all'=>[]];
-  $filter=[];
-  if($family != null) {
-    if(is_string($family)) {
-      $t=time();
-      $params=[
-        'index'=>INDEX,
-        'type'=>'taxon',
-        'body'=>[
-          'size'=> 9999,
-          'fields'=>['scientificNameWithoutAuthorship'],
-          'query'=>[
-            'bool'=>[
-              'must'=>[
-                [ 'match'=>[ 'taxonomicStatus'=>'accepted' ] ],
-                [ 'match'=>[ 'family'=>trim($family) ] ] ] ] ] ] ];
-      $result = $es->search($params);
-
-      $params=[
-        'index'=>INDEX,
-        'type'=>'taxon',
-        'body'=>[
-          'size'=> 9999,
-          'fields'=>['scientificNameWithoutAuthorship'],
-          'query'=>[
-            'bool'=>[
-              'must'=>[]]]]];
-      foreach($result['hits']['hits'] as $hit) {
-        foreach($hit['fields'] as $f) {
-          foreach($f as $name) {
-            $params['body']['query']['bool']['should'][]=['match'=>['acceptedNameUsage'=>['query'=>$name,'type'=>'phrase']]];
-          }
-        }
-      }
-      $result = $es->search($params);
-
-      $names= [];
-      foreach($result['hits']['hits'] as $hit) {
-        foreach($hit['fields'] as $f) {
-          foreach($f as $name) {
-            $names[] = $name;
-          }
-        }
-      }
-
-      $filter = ['bool'=>['should'=>[]]];
-      foreach($names as $name) {
-        $filter['bool']['should'][]=['match'=>['scientificNameWithoutAuthorship.raw'=>$name]];
-      }
-      $q=['filtered'=>['query'=>['match_all'=>[]],'filter'=>$filter]];
-    } else if (is_array($family)) {
-      $filter = $family;
-      $q=['filtered'=>['query'=>['match_all'=>[]],'filter'=>$filter]];
-    }
+  if($query != null && is_string($query)) {
+    $q=['query_string'=>['analyze_wildcard'=>false,'query'=>$query]];
   }
 
+  /* taxa count */
   $params = [
     'index'=>INDEX,
-    'type'=>'taxon',
+    'type'=>'analysis',
     'body'=>[
       'size'=>0,
-      'query'=>$q,
-      'aggs'=>[ 'status'=>[ 'terms'=>['field'=> 'taxonomicStatus','size'=>0]]]]];
+      'query'=>$q
+    ]];
+  $stats['accepted_count']=$es->count($params)['count'];
 
-  $r = $es->search($params);
-  $ts = $r['aggregations']['status']['buckets'];
-  foreach($ts as $tr) {
-    $stats[$tr['key'].'_count'] = $tr['doc_count'];
-  }
-  $stats['taxa_count']=$stats['synonym_count']+$stats['accepted_count'];
-
-  $params = ['index'=>INDEX, 'type'=>'occurrence','body'=>['query'=>$q]];
-  $stats['occurrence_count']=$es->count($params)['count'];
-
-  $params = ['index'=>INDEX, 'type'=>'count',
+  /* last update */
+  $params = ['index'=>INDEX, 'type'=>'analysis',
               'body'=>[
                 'size'=>1,
                 'fields'=>['timestamp'],
@@ -145,26 +95,27 @@ function stats($family=null) {
   $r = $es->search($params)['hits']['hits'][0]['fields']['timestamp'][0] / 1000;
   $stats['last_updated']=date('Y-m-d H:m:s',$r);
 
+  // main stats
   $params = [
     'index'=>INDEX,
+    'type'=>'analysis',
     'size'=>0,
     'fields'=>[],
     'body'=> [
       'size'=>0,
-    'query'=>$q,
+      'query'=>$q,
       'aggs'=>[
-        'categories'=>[ 'terms'=>['field'=>'main-risk-assessment.category','size'=>0] ],
-        'occs_count'=>[ 'sum'=>['field'=>'occurrences.count'] ],
-        'points_count'=>['sum'=>['field'=>'points.count'] ],
-       'occs_ranges'=>[
+        'categories'=>['terms'=>['field'=>'main-risk-assessment.category','size'=>0] ],
+        'occs_count'=>['sum'=>['field'=>'occurrences.count']],
+        'points_count'=>['sum'=>['field'=>'points.count']],
+        'occs_ranges'=>[
          'range'=>[ 
            'field'=>'occurrences.count',
            'ranges'=> [ ["from"=>0,"to"=>1]
                        ,["from"=>1,"to"=>3]
                        ,["from"=>3,"to"=>10]
                        ,["from"=>10,"to"=>100]
-                       ,["from"=>100,"to"=>99999]]
-         ]],
+                       ,["from"=>100,"to"=>99999]]]],
        'points_ranges'=>[
          'range'=>[ 
            'field'=>'points.count',
@@ -173,46 +124,35 @@ function stats($family=null) {
                        ,["from"=>3,"to"=>10]
                        ,["from"=>10,"to"=>100]
                        ,["from"=>100,"to"=>99999]]]],
-       'clusters'=>[
-         'filter'=>['term'=>['_type'=>'clusters']],
-         'aggs'=>[
-           'clusters_ranges'=>[
-             'range'=>[ 
-               'field'=>'count',
-               'ranges'=> [ ["from"=>0,"to"=>1]
-                           ,["from"=>1,"to"=>3]
-                           ,["from"=>3,"to"=>10]
-                           ,["from"=>10,"to"=>100]
-                           ,["from"=>100,"to"=>99999]]]]
-         ]],
-       'aoo'=>[
-         'filter'=>['term'=>['_type'=>'aoo']],
-         'aggs'=>[
-           'aoo_ranges'=>[
-             'range'=>[ 
-               'field'=>'area',
-               'ranges'=> [ ["from"=>0,"to"=>1]
-                           ,["from"=>1,"to"=>10]
-                           ,["from"=>10,"to"=>50]
-                           ,["from"=>50,"to"=>100]
-                           ,["from"=>100,"to"=>500]
-                           ,["from"=>500,"to"=>2000]
-                           ,["from"=>2000,"to"=>5000]
-                           ,["from"=>5000,"to"=>99999]]]]]],
-       'eoo'=>[
-         'filter'=>['term'=>['_type'=>'eoo']],
-         'aggs'=>[
-           'eoo_ranges'=>[
-             'range'=>[ 
-               'field'=>'area',
-               'ranges'=> [ ["from"=>0,"to"=>1]
-                           ,["from"=>1,"to"=>100]
-                           ,["from"=>100,"to"=>5000]
-                           ,["from"=>500,"to"=>5000]
-                           ,["from"=>5000,"to"=>20000]
-                           ,["from"=>20000,"to"=>50000]
-                           ,["from"=>50000,"to"=>999999]]]]]],
-       ]]]; 
+       'clusters_ranges'=>[
+         'range'=>[ 
+           'field'=>'clusters.all.count',
+           'ranges'=> [ ["from"=>0,"to"=>1]
+                       ,["from"=>1,"to"=>3]
+                       ,["from"=>3,"to"=>10]
+                       ,["from"=>10,"to"=>100]
+                       ,["from"=>100,"to"=>99999]]]],
+       'aoo_ranges'=>[
+         'range'=>[ 
+           'field'=>'aoo.all.area',
+           'ranges'=> [ ["from"=>0,"to"=>1]
+                       ,["from"=>1,"to"=>10]
+                       ,["from"=>10,"to"=>50]
+                       ,["from"=>50,"to"=>100]
+                       ,["from"=>100,"to"=>500]
+                       ,["from"=>500,"to"=>2000]
+                       ,["from"=>2000,"to"=>5000]
+                       ,["from"=>5000,"to"=>99999]]]],
+       'eoo_ranges'=>[
+         'range'=>[ 
+           'field'=>'eoo.all.area',
+           'ranges'=> [ ["from"=>0,"to"=>1]
+                       ,["from"=>1,"to"=>100]
+                       ,["from"=>100,"to"=>5000]
+                       ,["from"=>500,"to"=>5000]
+                       ,["from"=>5000,"to"=>20000]
+                       ,["from"=>20000,"to"=>50000]
+                       ,["from"=>50000,"to"=>999999]]]]]]]; 
 
   $r = $es->search($params);
 
@@ -232,27 +172,11 @@ function stats($family=null) {
       }
     } else if(isset($agg['value'])) {
       $stats[$k]=$agg['value'];
-    } else{
-      foreach($agg as $rek=>$reagg) {
-        if(isset($reagg['buckets'])) {
-          $stats[$rek]=[];
-          foreach($reagg['buckets'] as $value) {
-            $key = str_replace("-"," ~ ",str_replace(".0","",strtoupper( $value['key'] )));
-            $q=null;
-            if(strpos($key,"~") !== false){
-              $partsq=explode(" ~ ",$key);
-              $q='(>='.$partsq[0].' AND <'.$partsq[1].')';
-            } else {
-              $q=$key;
-            }
-            $stats[$rek][]=['label'=>$key,'value'=>$value['doc_count'],'q'=>$q];
-          }
-        }
-      }
     }
   }
 
   $stats['not_points_count']=$stats['occs_count']-$stats['points_count'];
+  $stats['occurrence_count']=$stats['occs_count'];
 
   $stats['json']=json_encode($stats);
   return $stats;
