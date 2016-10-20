@@ -49,7 +49,7 @@ $app->get('/families',function($req,$res){
       'aggs'=>[
         'families'=>[
           'terms'=>[
-            'field'=>'family.raw',
+            'field'=>'family',
             'size'=>0
           ]
         ]
@@ -61,10 +61,10 @@ $app->get('/families',function($req,$res){
   $families=[];
   foreach($r['aggregations']['families']['buckets'] as $f) {
     if(trim( $f['key'] ) == "") continue;
-    $families[]=strtoupper($f['key']);
+    $families[]=trim(strtoupper($f['key']));
   }
   sort($families);
-  $props['families']=$families;
+  $props['families']=array_unique($families);
 
   $res->getBody()->write(view('families',$props));
   return $res;
@@ -86,6 +86,7 @@ $app->get('/family/{family}',function($req,$res){
         'bool'=>[
           'must'=>[
             [ 'match'=>[ 'taxonomicStatus'=>'accepted' ] ],
+            [ 'match'=>[ 'taxonRank'=>'species' ] ],
             [ 'match'=>[ 'family'=>trim($family) ] ] ] ] ] ] ];
 
   $result = $es->search($params);
@@ -122,7 +123,7 @@ $app->get('/taxon/{taxon}',function($req,$res) {
           ,'body'=> [
             'size'=>1,
             'query'=>[
-                'term'=>['scientificNameWithoutAuthorship.raw'=>$taxon]]]];
+                'match'=>['scientificNameWithoutAuthorship'=>$taxon]]]];
   $props = $es->search($params)['hits']['hits'][0]['_source'];
   $props['occurrence_count']=$props['occurrences'];
   $props['title'] = $props['scientificName'];
