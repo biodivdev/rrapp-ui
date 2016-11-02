@@ -70,7 +70,7 @@ function stats($query=null) {
 
   $stats=[];
 
-  $q=['match_all'=>[]];
+  $q=['match_all'=> new \StdClass];
   if($query != null && is_string($query)) {
     $q=['query_string'=>['analyze_wildcard'=>false,'query'=>$query]];
   }
@@ -80,7 +80,6 @@ function stats($query=null) {
     'index'=>INDEX,
     'type'=>'analysis',
     'body'=>[
-      'size'=>0,
       'query'=>$q
     ]];
   $stats['accepted_count']=$es->count($params)['count'];
@@ -89,10 +88,10 @@ function stats($query=null) {
   $params = ['index'=>INDEX, 'type'=>'analysis',
               'body'=>[
                 'size'=>1,
-                'fields'=>['timestamp'],
-                'query'=>['match_all'=>[]],
+                '_source'=>['timestamp'],
+                'query'=>['match_all'=>new \StdClass],
                 'sort'=>['timestamp'=>'desc']]];
-  $r = $es->search($params)['hits']['hits'][0]['fields']['timestamp'][0] / 1000;
+  $r = $es->search($params)['hits']['hits'][0]['_source']['timestamp'][0] / 1000;
   $stats['last_updated']=date('Y-m-d H:m:s',$r);
 
   // main stats
@@ -100,12 +99,11 @@ function stats($query=null) {
     'index'=>INDEX,
     'type'=>'analysis',
     'size'=>0,
-    'fields'=>[],
     'body'=> [
       'size'=>0,
       'query'=>$q,
       'aggs'=>[
-        'categories'=>['terms'=>['field'=>'main-risk-assessment.category','size'=>0] ],
+        'categories'=>['terms'=>['field'=>'main-risk-assessment.category','size'=>9]],
         'occs_count'=>['sum'=>['field'=>'occurrences.count']],
         'points_count'=>['sum'=>['field'=>'points.count']],
         'occs_ranges'=>[

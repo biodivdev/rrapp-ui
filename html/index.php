@@ -44,13 +44,12 @@ $app->get('/families',function($req,$res){
     'index'=>INDEX,
     'type'=>'taxon',
     'size'=>0,
-    'fields'=>[],
     'body'=> [
       'aggs'=>[
         'families'=>[
           'terms'=>[
-            'field'=>'family',
-            'size'=>0
+            'field'=>'family.keyword',
+            'size'=>99999
           ]
         ]
       ]
@@ -61,10 +60,12 @@ $app->get('/families',function($req,$res){
   $families=[];
   foreach($r['aggregations']['families']['buckets'] as $f) {
     if(trim( $f['key'] ) == "") continue;
-    $families[]=trim(strtoupper($f['key']));
+    $f=trim(strtoupper($f['key']));
+    $families[$f]=$f;
   }
+  $families=array_keys($families);
   sort($families);
-  $props['families']=array_unique($families);
+  $props['families']=$families;
 
   $res->getBody()->write(view('families',$props));
   return $res;
@@ -104,7 +105,7 @@ $app->get('/family/{family}',function($req,$res){
   });
 
   $props['species']=$spps;
-  $props['stats']=stats("family:".$family);
+  $props['stats']=stats("family:\"".$family."\"");
   $props['query']="family:\"{$family}\"";
 
   $res->getBody()->write(view('family',$props));
@@ -164,6 +165,7 @@ $app->get('/search',function($req,$res) {
     'type'=>'analysis',
     'body'=>[
       'size'=> 9999,
+      '_source'=>['scientificNameWithoutAuthorship','scientificName','scientificNameAuthorship','synonyms','family'],
       'query'=>['query_string'=>['analyze_wildcard'=>false,'query'=>$q]]]];
 
   $result = $es->search($params);
