@@ -115,7 +115,7 @@
           {{#stats.clusters_ranges}}
           <tr>
             <th>
-              <a href='{{base}}/search?query={{#query}}{{query}} AND {{/query}}_type:"clusters" AND count:{{q}}'>{{label}}</a>
+              <a href='{{base}}/search?query={{#query}}{{query}} AND {{/query}}clusters.all.count:{{q}}'>{{label}}</a>
             </th>
             <td>{{value}}</td>
           </tr>
@@ -134,7 +134,7 @@
           {{#stats.eoo_ranges}}
           <tr>
             <th>
-              <a href='{{base}}/search?query={{#query}}{{query}} AND {{/query}}_type:"eoo" AND area:{{q}}'>{{label}}</a>
+              <a href='{{base}}/search?query={{#query}}{{query}} AND {{/query}}eoo.all.area:{{q}}'>{{label}}</a>
             </th>
             <td>{{value}}</td>
           </tr>
@@ -153,7 +153,7 @@
           {{#stats.aoo_ranges}}
           <tr>
             <th>
-              <a href='{{base}}/search?query={{#query}}{{query}} AND {{/query}}_type:"aoo" AND area:{{q}}'>{{label}}</a>
+              <a href='{{base}}/search?query={{#query}}{{query}} AND {{/query}}aoo.all.area:{{q}}'>{{label}}</a>
             </th>
             <td>{{value}}</td>
           </tr>
