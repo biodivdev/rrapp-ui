@@ -1,7 +1,0 @@
-{
-  "require": {
-    "slim/slim":"^3.0",
-    "mustache/mustache": "dev-master",
-    "elasticsearch/elasticsearch": "~2.0"
-  }
-}

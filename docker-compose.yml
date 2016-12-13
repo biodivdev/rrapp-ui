@@ -1,20 +1,13 @@
 version: "2"
 services:
-  biodivui:
-    image: diogok/php7
-    ports:
-      - 8080:80
-    volumes:
-      - .:/var/www
-    environment:
-      ELASTICSEARCH: "http://elasticsearch:9200"
+  #dwcbot:
+  #  image: diogok/dwc-bot-es
+  #  environment:
+  #    ELASTICSEARCH: http://elasticsearch:9200
+  #    INDEX: dwc
   elasticsearch:
     image: diogok/elasticsearch
     ports:
       - 9200:9200
     volumes:
       - /var/data/dwc-elasticsearch/data:/usr/share/elasticsearch/data:rw
-  kibana:
-    image: diogok/kibana
-    ports:
-      - 8001:8001
