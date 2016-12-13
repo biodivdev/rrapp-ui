@@ -12,6 +12,8 @@
   (:use ring.middleware.keyword-params)
   (:use ring.middleware.resource)
   (:use ring.middleware.content-type)
+  (:use ring.middleware.not-modified)
+  (:use ring.middleware.content-type)
   (:use ring.middleware.reload)
   (:use ring.middleware.gzip)
   (:use ring.middleware.cors)
@@ -42,6 +44,8 @@
   (-> #'router
     (wrap-gzip)
     (wrap-resource "public")
+    (wrap-content-type)
+    (wrap-not-modified)
     (wrap-cors #".*")
     (wrap-keyword-params)
     (wrap-params)
