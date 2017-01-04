@@ -312,3 +312,121 @@
         (include-js "/leaflet/leaflet.markercluster.js")
         (include-js "/js/map.js")
       )))
+
+(defn about []
+    (page "About"
+      [:section {:class "pure-u-1"}
+       [:article  
+        [:h3 "About this tool"]
+        [:p "This is a\n        set of " 
+         [:em "open-source"]" tools\n        to " 
+         [:em "daily"]"collect and serve consolidated " 
+         [:em "taxonomic"]" and " 
+         [:em "occurrence"]" data\n        from various " 
+         [:em "open data"]" sources\n        , perform " 
+         [:em "geospatial"]" analysis\n        that enable rapid " 
+         [:em "risk assessment"]"of country-level biodiversity\n        , and allow simple and directed " 
+         [:em "visualization"]"of the data and results."]]
+       [:article  
+        [:h3 "What made this possible"]
+        [:p "All this work is possible due to a series of developments in contribution, publishing and technologies related to biodiversity."]
+        [:p "Namely, not limited to:"]
+        [:ul  
+         [:li "DarwinCore standart by TDWG, that set common terms to work upon"]
+         [:li "DarwinCore-Archive design by GBIF, that allowed the exchange in efficient format of information"]
+         [:li "Integrated Publishing Toolkit from GBIF, that made simple and easy access to datasets"]
+         [:li "GBIF push and committiment to help publishers, which allows easy dicovery of source of data"]
+         [:li "IUCN Red Listing Guidelines, that provide a base set of rules for extinction risk assessment"]]]
+       [:article  
+        [:h3 "How does this work"]
+        [:p "Specifically, the daily workflow goes as follows, mostly in parallel:"]
+        [:ul  
+         [:li "Collect country taxonomic information from choosen checklists published in IPT"]
+         [:li "
+          [TODO]Download and load into local IPT country occurrences from GBIF by families"]
+         [:li "Collect from local and choosen IPTs occurrence datasets"]
+         [:li "For each taxon:" 
+          [:ul  
+           [:li "Consolidate occurrences from accepted name and synonyms"]
+           [:li "Classify occurrences in groups" 
+            [:ul  
+             [:li "All"]
+             [:li "Historic"]
+             [:li "Recent"]]]
+           [:li "
+            [TODO]Rate the quality of occurrences"]
+           [:li "For each group of occurrences perform the following analysis" 
+            [:ul  
+             [:li "Extent of occurrence (EOO)"]
+             [:li "Area of occupancy with regular grid of 2km side (AOO-2km)"]
+             [:li "Area of occupancy withh grid of variadic size (AOO-variadic)"]
+             [:li "Subpopulations/Locations/Cluster of occurrences based on circular buffer of median distance"]
+             [:li "Rapid Risk Assessment based on EOO, AOO and decline only"]]]]]
+         [:li "Display the results and statistics."]]
+        [:h4 "Extent of occurrences (EOO)"]
+        [:p "Utilizes a convex-hull method to calculate the total extent of occurrence for the specie."]
+        [:h4 "Area of Occupancy (AOO)"]
+        [:p "Using a world grid of 2km of side and of 10% of the maximum distance between occurrences, and matching those which have occurrences on it, \n           distincts them to calculate the area of occupancy of the specie."]
+        [:h4 "Population clusters"]
+        [:p "Based on 10% of the maximum distance between the species occurrences (to be changed to a minimum-spaning-tree following Rapoport&#39;s approach), draws a buffer of this radius around them\n           and groups those that intersects."]
+        [:h4 "Risk Assessment Analysis"]
+        [:p "Using IUCN category and criteria extinction risk assessment, but based only on geographical distribution and futher simplified."]
+        [:table {:class "pure-table"}
+         [:thead  
+          [:tr  
+           [:th "Metric"]
+           [:th "Value"]
+           [:th "Category (criteria)"]]]
+         [:tbody  
+          [:tr  
+           [:td "Number of records"]
+           [:td " &lt; 3"]
+           [:td "DD"]]
+          [:tr  
+           [:td "Area of occupancy"]
+           [:td " &lt; 10km²"]
+           [:td "CR (B2)"]]
+          [:tr  
+           [:td "Area of occupancy"]
+           [:td " &lt; 500km²"]
+           [:td "EN (B2)"]]
+          [:tr  
+           [:td "Area of occupancy"]
+           [:td " &lt; 2000km²"]
+           [:td "VU (B2)"]]
+          [:tr  
+           [:td "Extent of occurrence"]
+           [:td " &lt; 100km²"]
+           [:td "CR (B1)"]]
+          [:tr  
+           [:td "Extent of occurrence"]
+           [:td " &lt; 5000km²"]
+           [:td "EN (B1)"]]
+          [:tr  
+           [:td "Extent of occurrence"]
+           [:td " &lt; 20000km²"]
+           [:td "VU (B1)"]]]]
+        [:p "Decline and number of subpopulation might be taken into account as official guidelines suggest, if available."]
+        [:p " Due to lack of a method for some extra information (specially locations and threats), the categories had to be simplified.\n            The methodology can be improved if we have easy access to such data. "]
+        [:img {:src "https://www.lucidchart.com/publicSegments/view/e7bb93d5-57c3-496e-81e0-a8dbf615b2c4/image.png", :alt "Biodiversity Indexer Workflow", :class "workflow"}]]
+       [:article  
+        [:h3 "Other informations and links"]
+        [:p "You can read the " 
+         [:a {:href "http://www.lbd.dcc.ufmg.br/colecoes/wcama/2016/003.pdf"} "paper published at CSBC 2016 (WCAMA)"]", entitled &quot;Assessing the risk of extinction of Brazil’s flora: A computational approach based on micro-services and geospatial analysis&quot;, that describes the tools and methodolgies."]
+        [:p "Follow the progress and participate on the " 
+         [:a {:href "https://trello.com/b/5El2zEJK/biodiv"} "public task manager"]"."]
+        [:p "You can also check the " 
+         [:a {:href "https://github.com/biodivdev/rrapp-compose"} "source code"]" of the open source tools at github."]
+        [:p "Any feedback you can get in contact by email: " 
+         [:em "diogo@diogok.net"]"."]
+        [:p "All source code is available at gihub:"]
+        [:ul  
+         [:li 
+          [:a {:href "https://github.com/biodivdev/rrapp-compose"} "Composition of all apps"]]
+         [:li 
+          [:a {:href "https://github.com/biodivdev/rrapp-ui"} "Web interface"]]
+         [:li 
+          [:a {:href "https://github.com/biodivdev/rrapp-idx"} "General indexer"]]
+         [:li 
+          [:a {:href "https://github.com/biodivdev/dwc-bot-es"} "Occurrence bot to ElasticSearch"]]]]]
+))

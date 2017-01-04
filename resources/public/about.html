@@ -1,0 +1,135 @@
+    <section class="pure-u-1">
+      <article>
+        <h3>About this tool</h3>
+        <p>This is a
+        set of <em>open-source</em> tools
+        to <em>daily</em>
+        collect and serve consolidated <em>taxonomic</em> and <em>occurrence</em> data
+        from various <em>open data</em> sources
+        , perform <em>geospatial</em> analysis
+        that enable rapid <em>risk assessment</em>
+        of country-level biodiversity
+        , and allow simple and directed <em>visualization</em>
+        of the data and results.
+        </p>
+      </article>
+      <article>
+        <h3>What made this possible</h3>
+        <p>All this work is possible due to a series of developments in contribution, publishing and technologies related to biodiversity.</p>
+        <p>Namely, not limited to:</p>
+        <ul>
+          <li>DarwinCore standart by TDWG, that set common terms to work upon</li>
+          <li>DarwinCore-Archive design by GBIF, that allowed the exchange in efficient format of information</li>
+          <li>Integrated Publishing Toolkit from GBIF, that made simple and easy access to datasets</li>
+          <li>GBIF push and committiment to help publishers, which allows easy dicovery of source of data</li>
+          <li>IUCN Red Listing Guidelines, that provide a base set of rules for extinction risk assessment</li>
+        </ul>
+      </article>
+      <article>
+        <h3>How does this work</h3>
+        <p>Specifically, the daily workflow goes as follows, mostly in parallel:</p>
+        <ul>
+          <li>Collect country taxonomic information from choosen checklists published in IPT</li>
+          <li>[TODO] Download and load into local IPT country occurrences from GBIF by families</li>
+          <li>Collect from local and choosen IPTs occurrence datasets</li>
+          <li>For each taxon:
+            <ul>
+              <li>Consolidate occurrences from accepted name and synonyms</li>
+              <li>Classify occurrences in groups
+                <ul>
+                  <li>All</li>
+                  <li>Historic</li>
+                  <li>Recent</li>
+                </ul>
+              </li>
+              <li>[TODO] Rate the quality of occurrences</li>
+              <li>For each group of occurrences perform the following analysis
+                <ul>
+                  <li>Extent of occurrence (EOO)</li>
+                  <li>Area of occupancy with regular grid of 2km side (AOO-2km)</li>
+                  <li>Area of occupancy withh grid of variadic size (AOO-variadic)</li>
+                  <li>Subpopulations/Locations/Cluster of occurrences based on circular buffer of median distance</li>
+                  <li>Rapid Risk Assessment based on EOO, AOO and decline only</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>Display the results and statistics.</li>
+        </ul>
+        <h4>Extent of occurrences (EOO)</h4>
+        <p>Utilizes a convex-hull method to calculate the total extent of occurrence for the specie.</p>
+        <h4>Area of Occupancy (AOO)</h4>
+        <p>Using a world grid of 2km of side and of 10% of the maximum distance between occurrences, and matching those which have occurrences on it, 
+           distincts them to calculate the area of occupancy of the specie.</p>
+        <h4>Population clusters</h4>
+        <p>Based on 10% of the maximum distance between the species occurrences (to be changed to a minimum-spaning-tree following Rapoport's approach), draws a buffer of this radius around them
+           and groups those that intersects.</p>
+        <h4>Risk Assessment Analysis</h4>
+        <p>Using IUCN category and criteria extinction risk assessment, but based only on geographical distribution and futher simplified.</p>
+        <table class='pure-table'>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Value</th>
+              <th>Category (criteria)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Number of records</td>
+              <td> &lt; 3</td>
+              <td>DD</td>
+            </tr>
+            <tr>
+              <td>Area of occupancy</td>
+              <td> &lt; 10km²</td>
+              <td>CR (B2)</td>
+            </tr>
+            <tr>
+              <td>Area of occupancy</td>
+              <td> &lt; 500km²</td>
+              <td>EN (B2)</td>
+            </tr>
+            <tr>
+              <td>Area of occupancy</td>
+              <td> &lt; 2000km²</td>
+              <td>VU (B2)</td>
+            </tr>
+            <tr>
+              <td>Extent of occurrence</td>
+              <td> &lt; 100km²</td>
+              <td>CR (B1)</td>
+            </tr>
+            <tr>
+              <td>Extent of occurrence</td>
+              <td> &lt; 5000km²</td>
+              <td>EN (B1)</td>
+            </tr>
+            <tr>
+              <td>Extent of occurrence</td>
+              <td> &lt; 20000km²</td>
+              <td>VU (B1)</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Decline and number of subpopulation might be taken into account as official guidelines suggest, if available.</p>
+        <p> Due to lack of a method for some extra information (specially locations and threats), the categories had to be simplified.
+            The methodology can be improved if we have easy access to such data. </p>
+
+        <img src="https://www.lucidchart.com/publicSegments/view/e7bb93d5-57c3-496e-81e0-a8dbf615b2c4/image.png" alt="Biodiversity Indexer Workflow" class='workflow' />
+      </article>
+      <article>
+        <h3>Other informations and links</h3>
+        <p>You can read the <a href="http://www.lbd.dcc.ufmg.br/colecoes/wcama/2016/003.pdf">paper published at CSBC 2016 (WCAMA)</a>, entitled "Assessing the risk of extinction of Brazil’s flora: A computational approach based on micro-services and geospatial analysis", that describes the tools and methodolgies.</p>
+        <p>Follow the progress and participate on the <a href="https://trello.com/b/5El2zEJK/biodiv">public task manager</a>.</p>
+        <p>You can also check the <a href="https://github.com/biodivdev/rrapp-compose">source code</a> of the open source tools at github.</p>
+        <p>Any feedback you can get in contact by email: <em>diogo@diogok.net</em>.</p>
+        <p>All source code is available at gihub:</p>
+        <ul>
+          <li><a href="https://github.com/biodivdev/rrapp-compose">Composition of all apps</a></li>
+          <li><a href="https://github.com/biodivdev/rrapp-ui">Web interface</a></li>
+          <li><a href="https://github.com/biodivdev/rrapp-idx">General indexer</a></li>
+          <li><a href="https://github.com/biodivdev/dwc-bot-es">Occurrence bot to ElasticSearch</a></li>
+        </ul>
+      </article>
+    </section>

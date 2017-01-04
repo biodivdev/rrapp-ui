@@ -35,8 +35,11 @@
   (GET "/search" {{query :query} :params} (views/search query))
   (GET "/taxon/:taxon" {{taxon :taxon} :params} (views/taxon taxon))
 
+  (GET "/about" [] (views/about))
+
   (GET "/api/taxon/:taxon/analysis" {{taxon :taxon} :params} (json/write-str (core/get-spp taxon)))
   (GET "/api/taxon/:taxon/occurrences" {{taxon :taxon} :params} (json/write-str (core/get-occs (core/get-spp taxon))))
+
 
   (route/not-found "Not found"))
 
