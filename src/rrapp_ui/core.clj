@@ -58,19 +58,36 @@
   [spp] 
   (get-occs-0 (conj (map :scientificNameWithoutAuthorship (:synonyms spp)) (:scientificNameWithoutAuthorship spp))))
 
+(defn maybe-after
+  [after q] 
+   (if (nil? after) q (assoc q :search_after [after])))
+
+(defn search-spps-0
+  ([q] 
+   (loop [since nil acc []]
+     (let [r (search-spps-0 q since 5000)]
+       (if (< (count r) 5000)
+         (concat acc r)
+         (recur (:taxonID (last r)) (concat acc r))))))
+  ([q since limit] 
+    (->>
+      {:size limit
+       :_source ["scientificNameWithoutAuthorship","scientificNameAuthorship","synonyms.scientificNameWithoutAuthorship","synonyms.scientificNameAuthorship","family","taxonID"]
+       :sort ["taxonID"]
+       :query {:query_string {:query q :analyze_wildcard false}}}
+      (maybe-after since)
+      (post-json (str es "/analysis/_search"))
+      :hits
+      :hits
+      (map :_source))))
+
 (defn search-spps
   [q] 
   (->> 
-    {:size 9999
-     :_source ["scientificNameWithoutAuthorship","scientificNameAuthorship","synonyms.scientificNameWithoutAuthorship","synonyms.scientificNameAuthorship","family"]
-     :query {:query_string {:query q :analyze_wildcard false}}}
-    (post-json (str es "/analysis/_search"))
-    :hits
-    :hits
-    (map :_source)
+    (search-spps-0 q)
     (dedupme)
     (group-by :family)
-    (map #(hash-map :family (key %) :species (sort-by :scientificNameWithoutAuthorship (val %) )))
+    (map #(hash-map :family (key %) :species (sort-by :scientificNameWithoutAuthorship (val %))))
     (sort-by :family)))
 
 (defn get-spps
