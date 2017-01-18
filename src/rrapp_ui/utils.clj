@@ -37,7 +37,7 @@
       (do (log/error (str "Failled get JSON " (apply str url)))
           (log/error e)))))
 
-(defn post-json-0
+(defn post-json
   [url body] 
   (log/info "POST JSON" url)
   (try
@@ -49,12 +49,12 @@
       (do (log/error (str "Failed POST JSON " (apply str url)) body)
           (log/error e)))))
 
-(defn post-json
+(defn post-json-cached
   [url body]
   (let [id (hash (str url body))]
     (if (cache/has? @c id)
       (cache/lookup @c id)
-      (let [v (post-json-0 url body)]
+      (let [v (post-json url body)]
         (swap! c #(assoc % id v))
         v))))
 

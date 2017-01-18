@@ -76,7 +76,7 @@
        :sort ["taxonID"]
        :query {:query_string {:query q :analyze_wildcard false}}}
       (maybe-after since)
-      (post-json (str es "/analysis/_search"))
+      (post-json-cached (str es "/analysis/_search"))
       :hits
       :hits
       (map :_source))))
@@ -196,7 +196,7 @@
                {:from 20000 :to 50000}
                {:from 50000 :to 99999}]}}
        }} 
-     (post-json (str es "/analysis/_search"))
+     (post-json-cached (str es "/analysis/_search"))
      :aggregations
      (re-stats))))
 
