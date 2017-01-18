@@ -38,15 +38,14 @@
        [:footer.pure-u-1
         [:p.feedback
          [:a {:href "https://goo.gl/forms/AhEeLUIO9WlnKquc2"}
-          (localize :feedback)]]
+          (localize :feedback-text)]]
         [:p
          [:a {:href (str (env :base) "/")} (localize :home)]
          " "
          [:a {:href (str (env :base) "/about")} (localize :about)]
          " "
-         [:a {:href (str (env :base) "/elasticsearch")} (localize :elasticsearch)]
-         " "
-         [:a {:href (str (env :base) "/kibana")} (localize :kibana)]]]]
+         [:a {:href "https://goo.gl/forms/AhEeLUIO9WlnKquc2"}
+          (localize :feedback)]]]]
       (include-js "/js/ga.js")]))
 
 (defn search-form

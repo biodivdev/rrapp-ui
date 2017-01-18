@@ -56,5 +56,6 @@
   "points":"Pontos",
   "taxon-sources":"Fontes de taxonomia",
   "occs-sources":"Fontes de ocorrências",
-  "feedback":"Envie-nos seu comentário"
+  "feedback-text":"Envie-nos seu comentário",
+  "feedback":"Feedback"
 }

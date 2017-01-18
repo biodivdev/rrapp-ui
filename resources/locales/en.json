@@ -56,5 +56,6 @@
   "points":"Points",
   "taxon-sources":"Taxonomic sources",
   "occs-sources":"Occurrence sources",
-  "feedback":"Send your feedback"
+  "feedback-text":"Send your feedback",
+  "feedback":"Feedback"
 }
