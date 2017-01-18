@@ -1,5 +1,6 @@
 (ns rrapp-ui.utils
   (:require [clojure.java.io :as io])
+  (:require [clojure.core.cache :as cache])
   (:require [clj-http.lite.client :as client])
   (:require [taoensso.timbre :as log])
   (:require [environ.core :refer [env]])
@@ -11,6 +12,8 @@
     (if (.exists env)
       env
       base)))
+
+(def c (atom (cache/ttl-cache-factory {} :ttl (* 2 24 60 60 1000))))
 
 (def config-
   (with-open [rdr (io/reader config-file)]
@@ -34,7 +37,7 @@
       (do (log/error (str "Failled get JSON " (apply str url)))
           (log/error e)))))
 
-(defn post-json
+(defn post-json-0
   [url body] 
   (log/info "POST JSON" url)
   (try
@@ -45,4 +48,13 @@
     (catch Exception e 
       (do (log/error (str "Failed POST JSON " (apply str url)) body)
           (log/error e)))))
+
+(defn post-json
+  [url body]
+  (let [id (hash (str url body))]
+    (if (cache/has? @c id)
+      (cache/lookup @c id)
+      (let [v (post-json-0 url body)]
+        (swap! c #(assoc % id v))
+        v))))
 

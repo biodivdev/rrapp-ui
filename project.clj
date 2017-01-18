@@ -7,6 +7,7 @@
 
                  [clj-http-lite "0.3.0"]
                  [org.clojure/data.json "0.2.6"]
+                 [org.clojure/core.cache "0.6.5"]
 
                  [org.immutant/web "2.1.5"]
 
