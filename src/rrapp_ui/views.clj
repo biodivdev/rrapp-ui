@@ -124,7 +124,7 @@
         [:article.pure-u-1.pure-u-lg-1-2
          [:p (localize :number-of-clusters-by-spp-desc)]
          [:table.pure-table
-          (for [rg (:eoo-range s)]
+          (for [rg (:clusters-range s)]
             [:tr {:data-from (:from rg) :data-to (:to rg) :data-val (:val rg)}
                [:th 
                  [:a {:href (str (env :base) "/search?query=" (q-search q (str "clusters.all.count:(>=" (:from rg) " AND <" (:to rg)")" )))}
