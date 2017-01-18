@@ -62,15 +62,16 @@
   [q] 
   (->> 
     {:size 9999
-     :_source ["scientificNameWithoutAuthorship","scientificNameAuthorship","synonyms.scientificNameWithoutAuthorship","synonyms.scientificNameAuthorship"]
-     :query {:query_string {:query q :analyze_wildcard false } }}
+     :_source ["scientificNameWithoutAuthorship","scientificNameAuthorship","synonyms.scientificNameWithoutAuthorship","synonyms.scientificNameAuthorship","family"]
+     :query {:query_string {:query q :analyze_wildcard false}}}
     (post-json (str es "/analysis/_search"))
     :hits
     :hits
     (map :_source)
     (dedupme)
-    (sort-by :scientificNameWithoutAuthorship)
-    ))
+    (group-by :family)
+    (map #(hash-map :family (key %) :species (sort-by :scientificNameWithoutAuthorship (val %) )))
+    (sort-by :family)))
 
 (defn get-spps
   [family] 

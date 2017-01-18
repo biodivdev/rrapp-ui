@@ -208,20 +208,23 @@
     [:a {:name "#species"}]
     [:h3 (localize :species-of) " " (localize :search)]
     [:ul
-     (for [spp (core/search-spps q)]
+    (for [f (core/search-spps q)]
        [:li 
-        [:a {:href (str (env :base) "/taxon/" (:scientificNameWithoutAuthorship spp))}
-         [:i (:scientificNameWithoutAuthorship spp)]]
-          " " (:scientificNameAuthorship spp)
-        [:br]
-        [:small 
-         (for [syn (:synonyms spp)]
-          [:span
-            [:i (:scientificNameWithoutAuthorship syn)]
-           " "
-           (:scientificNameAuthorship syn) 
-           "; "])]
-        ])]))
+         [:p [:strong (:family f)]]
+         [:ul
+         (for [spp (:species f)]
+           [:li 
+            [:a {:href (str (env :base) "/taxon/" (:scientificNameWithoutAuthorship spp))}
+             [:i (:scientificNameWithoutAuthorship spp)]]
+              " " (:scientificNameAuthorship spp)
+            [:br]
+            [:small 
+             (for [syn (:synonyms spp)]
+              [:span
+                [:i (:scientificNameWithoutAuthorship syn)]
+               " "
+               (:scientificNameAuthorship syn) 
+               "; "])]])]])]))
 
 (defn taxon-table
   [spp cut]
