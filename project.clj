@@ -1,4 +1,4 @@
-(defproject rrapp-ui "0.0.1"
+(defproject rrapp-ui "0.0.2"
   :description "Web User Interface for RRAPP."
   :url "https://github.com/biodivdev/rrapp-ui"
   :license {:name "TMIT"}
