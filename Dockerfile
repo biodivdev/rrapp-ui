@@ -6,5 +6,5 @@ EXPOSE 80
 WORKDIR /opt
 CMD ["java","-server","-XX:+UseConcMarkSweepGC","-XX:+UseCompressedOops","-XX:+DoEscapeAnalysis","-DPORT=80","-jar","rrapp-ui.jar"]
 
-ADD target/rrapp-ui-0.0.1-standalone.jar /opt/rrapp-ui.jar
+ADD target/rrapp-ui-0.0.2-standalone.jar /opt/rrapp-ui.jar
 

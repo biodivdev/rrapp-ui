@@ -38,15 +38,14 @@
        [:footer.pure-u-1
         [:p.feedback
          [:a {:href "https://goo.gl/forms/AhEeLUIO9WlnKquc2"}
-          (localize :feedback)]]
+          (localize :feedback-text)]]
         [:p
          [:a {:href (str (env :base) "/")} (localize :home)]
          " "
          [:a {:href (str (env :base) "/about")} (localize :about)]
          " "
-         [:a {:href (str (env :base) "/elasticsearch")} (localize :elasticsearch)]
-         " "
-         [:a {:href (str (env :base) "/kibana")} (localize :kibana)]]]]
+         [:a {:href "https://goo.gl/forms/AhEeLUIO9WlnKquc2"}
+          (localize :feedback)]]]]
       (include-js "/js/ga.js")]))
 
 (defn search-form
@@ -125,7 +124,7 @@
         [:article.pure-u-1.pure-u-lg-1-2
          [:p (localize :number-of-clusters-by-spp-desc)]
          [:table.pure-table
-          (for [rg (:eoo-range s)]
+          (for [rg (:clusters-range s)]
             [:tr {:data-from (:from rg) :data-to (:to rg) :data-val (:val rg)}
                [:th 
                  [:a {:href (str (env :base) "/search?query=" (q-search q (str "clusters.all.count:(>=" (:from rg) " AND <" (:to rg)")" )))}
@@ -208,20 +207,23 @@
     [:a {:name "#species"}]
     [:h3 (localize :species-of) " " (localize :search)]
     [:ul
-     (for [spp (core/search-spps q)]
+    (for [f (core/search-spps q)]
        [:li 
-        [:a {:href (str (env :base) "/taxon/" (:scientificNameWithoutAuthorship spp))}
-         [:i (:scientificNameWithoutAuthorship spp)]]
-          " " (:scientificNameAuthorship spp)
-        [:br]
-        [:small 
-         (for [syn (:synonyms spp)]
-          [:span
-            [:i (:scientificNameWithoutAuthorship syn)]
-           " "
-           (:scientificNameAuthorship syn) 
-           "; "])]
-        ])]))
+         [:p [:strong (:family f)]]
+         [:ul
+         (for [spp (:species f)]
+           [:li 
+            [:a {:href (str (env :base) "/taxon/" (:scientificNameWithoutAuthorship spp))}
+             [:i (:scientificNameWithoutAuthorship spp)]]
+              " " (:scientificNameAuthorship spp)
+            [:br]
+            [:small 
+             (for [syn (:synonyms spp)]
+              [:span
+                [:i (:scientificNameWithoutAuthorship syn)]
+               " "
+               (:scientificNameAuthorship syn) 
+               "; "])]])]])]))
 
 (defn taxon-table
   [spp cut]

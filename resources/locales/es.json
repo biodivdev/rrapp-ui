@@ -56,5 +56,6 @@
   "points":"Puntos",
   "taxon-sources":"Fuentes de taxonomia",
   "occs-sources":"Fuentes de ocurrencias",
-  "feedback":"Entre en contacto"
+  "feedback-text":"Entre en contacto",
+  "feedback":"Feedback"
 }
